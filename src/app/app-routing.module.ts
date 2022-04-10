@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PlaceholderComponent } from './placeholder/placeholder.component';
-import { SigninComponent } from './signin/signin.component';
+import { SigninComponent } from './components/signin/signin.component';
 import { AuthGuard } from './auth.guard';
-import { AboutComponent } from './about/about.component';
-import { UsersComponent } from './users/users.component';
-import { BacklogComponent } from './backlog/backlog.component';
+import { AboutComponent } from './components/about/about.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -15,15 +13,14 @@ const routes: Routes = [
   },
   {
     path: 'tickets',
-    children: [
-      { path: '', component: PlaceholderComponent },
-      { path: 'board', component: BacklogComponent },
-    ],
+    loadChildren: () =>
+      import('./features/tickets/tickets.module').then((m) => m.TicketsModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'users',
-    component: UsersComponent,
+    loadChildren: () =>
+      import('./features/users/users.module').then((m) => m.UsersModule),
     canActivate: [AuthGuard],
   },
   {
@@ -31,7 +28,7 @@ const routes: Routes = [
     component: AboutComponent,
   },
   { path: 'signin', component: SigninComponent },
-  { path: 'signup', component: SigninComponent },
+  { path: 'signup', component: SignupComponent },
   {
     path: '**',
     redirectTo: 'tickets', // TODO: Create dedicated HTTP 404 Not Found page

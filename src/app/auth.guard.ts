@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> {
 
-    console.log('can activate guard');
     return of(true)
       .pipe(
         map((s) => {

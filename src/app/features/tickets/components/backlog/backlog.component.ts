@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DialogOverviewExample } from '../dialog-overview-example/dialog-overview-example.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-
-interface User {
-  name: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-}
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { environment } from '../../../../../environments/environment';
 
 interface Ticket {
   id: number | string;
@@ -29,9 +26,9 @@ interface Ticket {
 }
 
 @Component({
-  selector: 'app-placeholder',
-  templateUrl: './placeholder.component.html',
-  styleUrls: ['./placeholder.component.scss'],
+  selector: 'app-backlog',
+  templateUrl: './backlog.component.html',
+  styleUrls: ['./backlog.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -43,11 +40,9 @@ interface Ticket {
     ]),
   ],
 })
-export class PlaceholderComponent implements OnInit {
+export class BacklogComponent implements OnInit {
   title = 'learning-testing-2022-frontend';
   apiUrl = environment.apiUrl;
-  usersColumns: string[] = [];
-  users: User[] = [];
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
   ticketsColumns: string[] = [];
@@ -56,24 +51,7 @@ export class PlaceholderComponent implements OnInit {
   constructor(private http: HttpClient, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.getUsers();
     this.getTickets();
-  }
-
-  getUsers(): void {
-    this.http.get<User[]>(this.apiUrl + '/users').subscribe((users) => {
-      console.log(users);
-      this.usersColumns = [
-        'id',
-        'name',
-        'email',
-        'role',
-        // 'createdAt',
-        // 'updatedAt',
-        // 'deletedAt',
-      ];
-      this.users = users || [];
-    });
   }
 
   getTickets(): void {
