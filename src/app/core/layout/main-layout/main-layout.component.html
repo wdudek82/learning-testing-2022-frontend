@@ -37,22 +37,20 @@
   </button>
 
   <ng-container *ngIf="isLoggedIn; else signupOrSignout">
-    <button mat-flat-button color="primary" routerLink="/signout" routerLinkActive="active">
+    <button mat-flat-button color="primary" routerLink="/auth/signout" routerLinkActive="active">
       <mat-icon>logout</mat-icon>
       Sign Out
     </button>
   </ng-container>
 
   <ng-template #signupOrSignout>
-    <button mat-flat-button color="primary" routerLink="/signin" routerLinkActive="active">
-      <mat-icon>login</mat-icon>
-      Sign In
-    </button>
-    <button mat-flat-button color="primary" routerLink="/signup" routerLinkActive="active">
+    <button mat-flat-button color="primary" routerLink="/auth/signup" routerLinkActive="active">
       <mat-icon>person_add</mat-icon>
       Sign Up
     </button>
+    <button mat-flat-button color="primary" routerLink="/auth/signin" routerLinkActive="active">
+      <mat-icon>login</mat-icon>
+      Sign In
+    </button>
   </ng-template>
 </mat-toolbar>
-
-<router-outlet></router-outlet>

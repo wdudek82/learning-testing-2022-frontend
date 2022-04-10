@@ -1,15 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SigninComponent } from './components/signin/signin.component';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './features/auth/auth.guard';
 import { AboutComponent } from './components/about/about.component';
-import { SignupComponent } from './components/signup/signup.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'about',
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: 'tickets',
@@ -27,11 +31,9 @@ const routes: Routes = [
     path: 'about',
     component: AboutComponent,
   },
-  { path: 'signin', component: SigninComponent },
-  { path: 'signup', component: SignupComponent },
   {
     path: '**',
-    redirectTo: 'tickets', // TODO: Create dedicated HTTP 404 Not Found page
+    component: PageNotFoundComponent,
   },
 ];
 

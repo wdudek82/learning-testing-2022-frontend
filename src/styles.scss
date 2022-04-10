@@ -4,3 +4,12 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+.content-container {
+  width: 60%;
+  margin: 1rem auto 3rem;
+}
