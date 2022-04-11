@@ -5,7 +5,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatchPassword } from '../validators/match-password';
+import { MatchPasswordValidator } from '../validators/match-password.validator';
+import { UniqueEmailValidator } from '../validators/unique-email.validator';
 
 enum FormControlNames {
   USERNAME = 'username',
@@ -29,7 +30,11 @@ export class SignupComponent implements OnInit {
         Validators.maxLength(20),
         Validators.pattern(/^\w+$/),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl(
+        '',
+        [Validators.required, Validators.email],
+        [this.uniqueEmailValidator.validate],
+      ),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
@@ -45,14 +50,14 @@ export class SignupComponent implements OnInit {
       // role: new FormControl(),
       // isActive: new FormControl(),
     },
-    { validators: [this.matchPassword.validate] },
+    { validators: [new MatchPasswordValidator().validate] },
   );
 
   get email(): AbstractControl | null {
     return this.authForm.get('email');
   }
 
-  constructor(private matchPassword: MatchPassword) {}
+  constructor(private uniqueEmailValidator: UniqueEmailValidator) {}
 
   ngOnInit(): void {}
 
@@ -77,6 +82,10 @@ export class SignupComponent implements OnInit {
     }
     if (formControl?.hasError('email')) {
       return 'Not a valid email';
+    }
+
+    if (formControl?.hasError('emailIsNotUnique')) {
+      return 'This e-mail address is already in use';
     }
 
     return '';

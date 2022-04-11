@@ -13,6 +13,7 @@
         <mat-label>E-mail</mat-label>
         <input matInput formControlName="email" />
         <mat-error *ngIf="authForm.get('email')?.invalid">{{getErrorMessage(formControlNames.EMAIL)}}</mat-error>
+        <mat-error *ngIf="authForm.hasError('emailIsNotUnique')">E-mail address already in use</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
