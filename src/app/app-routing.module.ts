@@ -24,7 +24,9 @@ const routes: Routes = [
   {
     path: 'users',
     loadChildren: () =>
-      import('./features/users/users.module').then((m) => m.UsersModule),
+      import('./features/users-management/users-management.module').then(
+        (m) => m.UsersManagementModule,
+      ),
     canActivate: [AuthGuard],
   },
   {

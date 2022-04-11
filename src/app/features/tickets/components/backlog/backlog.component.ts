@@ -12,6 +12,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { environment } from '../../../../../environments/environment';
+import {TicketDetailsModalComponent} from "../ticket-details-modal/ticket-details-modal.component";
 
 interface Ticket {
   id: number | string;
@@ -45,7 +46,17 @@ export class BacklogComponent implements OnInit {
   apiUrl = environment.apiUrl;
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
-  ticketsColumns: string[] = [];
+  ticketsColumns: string[] = [
+    'id',
+    // 'position',
+    'title',
+    // 'description',
+    'priority',
+    'status',
+    // 'createdAt',
+    // 'updatedAt',
+    // 'deletedAt',
+  ];
   expandedElement?: Ticket | null;
 
   constructor(private http: HttpClient, public dialog: MatDialog) {}
@@ -56,18 +67,6 @@ export class BacklogComponent implements OnInit {
 
   getTickets(): void {
     this.http.get<Ticket[]>(this.apiUrl + '/tickets').subscribe((tickets) => {
-      console.log(tickets);
-      this.ticketsColumns = [
-        'id',
-        // 'position',
-        'title',
-        // 'description',
-        'priority',
-        'status',
-        // 'createdAt',
-        // 'updatedAt',
-        // 'deletedAt',
-      ];
       this.tickets = tickets || [];
       this.interpolateTicketsIds();
       this.recalculateTicketPositions();
@@ -114,8 +113,8 @@ export class BacklogComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExample, {
-      width: '250px',
+    const dialogRef = this.dialog.open(TicketDetailsModalComponent, {
+      width: '700px',
       data: {},
     });
 

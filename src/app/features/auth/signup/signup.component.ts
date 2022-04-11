@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormControl,
   FormGroup,
-  Validator,
   Validators,
 } from '@angular/forms';
 import { MatchPassword } from '../validators/match-password';
@@ -59,6 +58,7 @@ export class SignupComponent implements OnInit {
 
   getErrorMessage(name: FormControlNames): string {
     const formControl: AbstractControl | null = this.authForm.get(name);
+
     if (formControl?.hasError('required')) {
       return 'Field is required';
     }
@@ -78,12 +78,7 @@ export class SignupComponent implements OnInit {
     if (formControl?.hasError('email')) {
       return 'Not a valid email';
     }
-    // console.log('name:', name, 'authForm errors:', this.authForm.errors);
-    // (name === this.formControlNames.PASSWORD ||
-    //   name === this.formControlNames.PASSWORD_CONFIRMATION) &&
-    // if (this.authForm.hasError('passwordsDontMatch')) {
-    //   return "Passwords don't match";
-    // }
+
     return '';
   }
 }

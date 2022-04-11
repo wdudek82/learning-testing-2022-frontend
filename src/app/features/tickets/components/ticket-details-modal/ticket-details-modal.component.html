@@ -1,0 +1,45 @@
+<form [formGroup]="form">
+  <h2>Index details modal</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title"/>
+    <mat-error *ngIf="form.get('title')?.invalid">{{getErrorMessage('')}}</mat-error>
+  </mat-form-field>
+
+  <section style="display: flex;">
+    <mat-form-field appearance="fill" style="flex-grow: 1; margin-right: 1rem;">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let priority of prioritiesOptions" [value]="priority.value">
+          {{priority.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="flex-grow: 1; margin-right: 1rem;">
+      <mat-label>Assignee</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let user of usersOptions" [value]="user.value">
+          {{user.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <!--  <mat-form-field appearance="fill">-->
+  <!--    <mat-label>Related Ticket</mat-label>-->
+  <!--    <input matInput formControlName="relatedTicket"/>-->
+  <!--    <mat-error *ngIf="form.get('relatedTicket')?.invalid">{{getErrorMessage('')}}</mat-error>-->
+  <!--  </mat-form-field>-->
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" rows="10"></textarea>
+    <mat-error *ngIf="form.get('description')?.invalid">{{getErrorMessage('')}}</mat-error>
+  </mat-form-field>
+
+
+  <button mat-raised-button color="primary" class="mr-xs">Submit</button>
+  <button mat-raised-button (click)="onClose()">Close</button>
+</form>

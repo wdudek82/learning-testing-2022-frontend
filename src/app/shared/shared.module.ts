@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { InputComponent } from './components/input/input.component';
+import {MatSelectModule} from "@angular/material/select";
 
 const vendorModules = [
   CommonModule,
@@ -40,6 +41,7 @@ const materialModules = [
   MatInputModule,
   MatDialogModule,
   MatCardModule,
+  MatSelectModule,
   DragDropModule,
 ];
 

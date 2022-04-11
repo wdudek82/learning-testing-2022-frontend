@@ -6,25 +6,27 @@
       <mat-form-field appearance="fill">
         <mat-label>Username</mat-label>
         <input matInput formControlName="username" />
-        <mat-error *ngIf="email?.invalid">{{getErrorMessage(formControlNames.USERNAME)}}</mat-error>
+        <mat-error *ngIf="authForm.get('username')?.invalid">{{getErrorMessage(formControlNames.USERNAME)}}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>E-mail</mat-label>
         <input matInput formControlName="email" />
-        <mat-error *ngIf="email?.invalid">{{getErrorMessage(formControlNames.EMAIL)}}</mat-error>
+        <mat-error *ngIf="authForm.get('email')?.invalid">{{getErrorMessage(formControlNames.EMAIL)}}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" placeholder="Password" />
-        <mat-error *ngIf="email?.invalid">{{getErrorMessage(formControlNames.PASSWORD)}}</mat-error>
+        <mat-error *ngIf="authForm.get('password')?.invalid">{{getErrorMessage(formControlNames.PASSWORD)}}</mat-error>
+        <mat-error *ngIf="authForm.hasError('passwordsDontMatch')">Passwords don't match</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Password confirmation</mat-label>
         <input matInput formControlName="passwordConfirmation" />
-        <mat-error *ngIf="email?.invalid">{{getErrorMessage(formControlNames.PASSWORD_CONFIRMATION)}}</mat-error>
+        <mat-error *ngIf="authForm.get('passwordConfirmation')?.invalid">{{getErrorMessage(formControlNames.PASSWORD_CONFIRMATION)}}</mat-error>
+        <mat-error *ngIf="authForm.hasError('passwordsDontMatch')">Passwords don't match</mat-error>
       </mat-form-field>
 
       <button mat-raised-button color="primary">Submit</button>
