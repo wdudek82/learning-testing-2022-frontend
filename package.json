@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy:gh": "ng build --prod --base-href \"https://wdudek82.github.io/learning-testing-2022-frontend/\" && angular-cli-ghpages --dir=\"dist/learning-testing-2022-frontend\""
   },
   "private": true,
   "dependencies": {
