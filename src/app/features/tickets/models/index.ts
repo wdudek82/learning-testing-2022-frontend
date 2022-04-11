@@ -27,6 +27,7 @@ export interface Comment {
 }
 
 export interface Ticket {
+  id: number | string;
   title: string;
   description: string;
   priority: Priority;

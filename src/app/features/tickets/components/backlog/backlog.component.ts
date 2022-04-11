@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { DialogOverviewExample } from '../dialog-overview-example/dialog-overview-example.component';
 import {
   animate,
   state,
@@ -12,19 +11,9 @@ import {
   trigger,
 } from '@angular/animations';
 import { environment } from '../../../../../environments/environment';
-import {TicketDetailsModalComponent} from "../ticket-details-modal/ticket-details-modal.component";
-
-interface Ticket {
-  id: number | string;
-  title: string;
-  description: string;
-  priority: string;
-  status: string;
-  position: number | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-}
+import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
+import { TicketsService } from '../../tickets.service';
+import { Ticket } from '../../models';
 
 @Component({
   selector: 'app-backlog',
@@ -59,15 +48,19 @@ export class BacklogComponent implements OnInit {
   ];
   expandedElement?: Ticket | null;
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    public dialog: MatDialog,
+    private ticketsService: TicketsService,
+  ) {}
 
   ngOnInit(): void {
-    this.getTickets();
+    this.loadTickets();
   }
 
-  getTickets(): void {
-    this.http.get<Ticket[]>(this.apiUrl + '/tickets').subscribe((tickets) => {
-      this.tickets = tickets || [];
+  loadTickets(): void {
+    this.ticketsService.getTickets().subscribe((tickets) => {
+      this.tickets = tickets;
       this.interpolateTicketsIds();
       this.recalculateTicketPositions();
       this.ticketsDataSource = new MatTableDataSource<Ticket>(tickets);
@@ -93,19 +86,6 @@ export class BacklogComponent implements OnInit {
     this.ticketsDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  addData() {}
-
-  // addData() {
-  //   const randomElementIndex = Math.floor(Math.random() * ELEMENT_DATA.length);
-  //   this.dataSource.push(ELEMENT_DATA[randomElementIndex]);
-  //   this.table.renderRows();
-  // }
-  // addData() {
-  //   const randomElementIndex = Math.floor(Math.random() * ELEMENT_DATA.length);
-  //   this.dataToDisplay = [...this.dataToDisplay, ELEMENT_DATA[randomElementIndex]];
-  //   this.dataSource.setData(this.dataToDisplay);
-  // }
-
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tickets, event.previousIndex, event.currentIndex);
     this.recalculateTicketPositions();
@@ -116,10 +96,12 @@ export class BacklogComponent implements OnInit {
     const dialogRef = this.dialog.open(TicketDetailsModalComponent, {
       width: '700px',
       data: {},
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`The dialog was closed. Result: ${result}`);
+      this.loadTickets();
     });
   }
 }

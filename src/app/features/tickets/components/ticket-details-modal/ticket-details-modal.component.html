@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <h2>Index details modal</h2>
 
   <mat-form-field appearance="fill">
@@ -19,7 +19,7 @@
 
     <mat-form-field appearance="fill" style="flex-grow: 1; margin-right: 1rem;">
       <mat-label>Assignee</mat-label>
-      <mat-select formControlName="priority">
+      <mat-select formControlName="assignee">
         <mat-option *ngFor="let user of usersOptions" [value]="user.value">
           {{user.viewValue}}
         </mat-option>
@@ -40,6 +40,6 @@
   </mat-form-field>
 
 
-  <button mat-raised-button color="primary" class="mr-xs">Submit</button>
+  <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid">Submit</button>
   <button mat-raised-button (click)="onClose()">Close</button>
 </form>
