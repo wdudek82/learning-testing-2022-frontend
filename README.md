@@ -38,4 +38,4 @@ ng build --prod --base-href "https://GitHubUserName.github.io/GitHubfolderName/"
 
 angular-cli-ghpages --dir=dist/learning-testing-2022-frontend
 
-or use script: `./tools/gh_pages_deploy.sh`
+or use script: `npm run deploy:gh`
