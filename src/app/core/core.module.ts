@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [MainLayoutComponent],
@@ -16,6 +17,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
+    ToastrModule.forRoot({
+      progressBar: true,
+      positionClass: 'toast-bottom-right',
+    }),
   ],
   exports: [
     MainLayoutComponent,

@@ -3,7 +3,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Title</mat-label>
-    <input matInput formControlName="title"/>
+    <input matInput formControlName="title" />
     <mat-error *ngIf="form.get('title')?.invalid">{{getErrorMessage('')}}</mat-error>
   </mat-form-field>
 
@@ -40,6 +40,6 @@
   </mat-form-field>
 
 
-  <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid">Submit</button>
-  <button mat-raised-button (click)="onClose()">Close</button>
+  <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid" type="submit">Submit</button>
+  <button mat-raised-button (click)="onClose()" type="button">Close</button>
 </form>

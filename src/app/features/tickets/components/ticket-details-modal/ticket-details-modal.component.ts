@@ -6,6 +6,7 @@ import { Observable, Subscription } from "rxjs";
 import { User } from "../../../../core/models";
 import { UsersService } from "../../../../core/services/users.service";
 import { TicketsService } from "../../tickets.service";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ticket-details-modal',
@@ -41,6 +42,7 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private usersService: UsersService,
     private ticketsService: TicketsService,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {

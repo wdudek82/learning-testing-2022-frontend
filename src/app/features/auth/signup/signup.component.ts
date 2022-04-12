@@ -96,12 +96,21 @@ export class SignupComponent {
   }
 
   onSubmit() {
+    // TODO: Add loading indicator to email (async validation)
+    // TODO: Add loading indicator when signup form is submitted
+    // TODO: Create core notification.service (using toastr)
+    // TODO: On success: Reset form when user has been submitted and show success toastr
+    // TODO: Unlock form and show error toastr
+    this.authForm.disable();
     if (this.authForm.invalid) return;
     this.authService.createUser(this.authForm.value).subscribe({
       next: (res) => {
         console.log(res);
+        this.authForm.reset();
+        this.authForm.enable();
       },
       error: (err) => {
+        this.authForm.enable();
         console.log(err);
       },
     });
