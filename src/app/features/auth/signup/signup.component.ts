@@ -8,7 +8,7 @@ import {
 import { MatchPasswordValidator } from '../validators/match-password.validator';
 import { UniqueEmailValidator } from '../validators/unique-email.validator';
 import { AuthService } from '../auth.service';
-import { UserData } from '../../../core/models';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
@@ -64,10 +64,14 @@ export class SignupComponent {
   get passwordConfirmation(): AbstractControl | null {
     return this.authForm.get('passwordConfirmation');
   }
+  get inputType(): string {
+    return this.hidePassword ? 'password' : 'text';
+  }
 
   constructor(
     private uniqueEmailValidator: UniqueEmailValidator,
     private authService: AuthService,
+    private toastr: ToastrService,
   ) {}
 
   getErrorMessage(control: AbstractControl | null): string {
@@ -98,30 +102,26 @@ export class SignupComponent {
   onSubmit() {
     // TODO: Add loading indicator to email (async validation)
     // TODO: Add loading indicator when signup form is submitted
-    // TODO: Create core notification.service (using toastr)
-    // TODO: On success: Reset form when user has been submitted and show success toastr
-    // TODO: Unlock form and show error toastr
+    // TODO: On success: Redirect to "success"
+    // TODO: On error: reset form and show error notification
     this.authForm.disable();
+
     if (this.authForm.invalid) return;
+
     this.authService.createUser(this.authForm.value).subscribe({
       next: (res) => {
-        console.log(res);
+        this.toastr.success('A new account has been created!', 'Success');
         this.authForm.reset();
         this.authForm.enable();
       },
       error: (err) => {
+        this.toastr.error('Something went wrong', 'Error');
         this.authForm.enable();
-        console.log(err);
       },
     });
   }
 
   toggleHidePassword(): void {
     this.hidePassword = !this.hidePassword;
-  }
-
-  getInputType(): string {
-    console.log('clicked:', this.hidePassword);
-    return this.hidePassword ? 'text' : 'password';
   }
 }

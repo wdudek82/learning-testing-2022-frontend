@@ -17,13 +17,13 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" />
+        <input matInput formControlName="password" [type]="inputType" />
         <mat-error *ngIf="password?.invalid">{{getErrorMessage(password)}}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Password confirmation</mat-label>
-        <input matInput formControlName="passwordConfirmation" [type]="hidePassword ? 'password' : 'text'" />
+        <input matInput formControlName="passwordConfirmation" [type]="inputType" />
         <mat-error *ngIf="passwordConfirmation?.invalid">{{getErrorMessage(passwordConfirmation)}}</mat-error>
       </mat-form-field>
 
