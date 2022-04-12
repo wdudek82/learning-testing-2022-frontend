@@ -20,8 +20,8 @@ export class UniqueEmailValidator implements AsyncValidator {
 
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
     return control.valueChanges.pipe(
-      take(1),
       debounceTime(500),
+      take(1),
       distinctUntilChanged(),
       switchMap((value) => this.authService.checkEmail(value)),
       map((value) => (value?.id ? { emailIsNotUnique: true } : null)),
