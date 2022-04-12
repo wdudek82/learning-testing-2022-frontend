@@ -47,6 +47,7 @@ export class SignupComponent {
     },
     { validators: [new MatchPasswordValidator().validate] },
   );
+  hidePassword = true;
 
   get name(): AbstractControl | null {
     return this.authForm.get('name');
@@ -104,5 +105,14 @@ export class SignupComponent {
         console.log(err);
       },
     });
+  }
+
+  toggleHidePassword(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  getInputType(): string {
+    console.log('clicked:', this.hidePassword);
+    return this.hidePassword ? 'text' : 'password';
   }
 }
