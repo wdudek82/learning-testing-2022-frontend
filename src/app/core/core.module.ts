@@ -20,10 +20,9 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot({
       progressBar: true,
       positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
     }),
   ],
-  exports: [
-    MainLayoutComponent,
-  ],
+  exports: [MainLayoutComponent],
 })
 export class CoreModule {}

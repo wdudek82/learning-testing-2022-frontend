@@ -104,9 +104,8 @@ export class SignupComponent {
     // TODO: Add loading indicator when signup form is submitted
     // TODO: On success: Redirect to "success"
     // TODO: On error: reset form and show error notification
-    this.authForm.disable();
-
     if (this.authForm.invalid) return;
+    this.authForm.disable();
 
     this.authService.createUser(this.authForm.value).subscribe({
       next: (res) => {
