@@ -111,11 +111,20 @@ export class SignupComponent {
     this.authService.createUser(this.authForm.value).subscribe({
       next: (res) => {
         this.toastr.success('A new account has been created!', 'Success');
-        this.authForm.reset();
         this.authForm.enable();
+        this.authForm.reset();
+        // this.authForm.markAsPristine();
+        // this.authForm.markAsUntouched();
+        // this.authForm.updateValueAndValidity();
       },
       error: (err) => {
-        this.toastr.error('Something went wrong', 'Error');
+        let title = err?.error?.error ? err.error.error : 'Error';
+        let message = 'Something went wrong';
+        if (err?.error?.message) {
+          const errorMsg = err.error.message;
+          message = Array.isArray(errorMsg) ? errorMsg.join('<br>') : errorMsg;
+        }
+        this.toastr.error(message, title);
         this.authForm.enable();
       },
     });
