@@ -32,7 +32,7 @@
       <button mat-raised-button color="primary" class="mr-xs" [disabled]="authForm.invalid">Submit</button>
       <button mat-raised-button (click)="hidePassword = !hidePassword"
               [matTooltip]="hidePassword ? 'Show passwords' : 'Hide passwords'">
-        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
       </button>
     </form>
   </mat-card-content>
