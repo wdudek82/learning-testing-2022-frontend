@@ -13,13 +13,11 @@ export class AuthService {
 
   constructor(private http: HttpClient, private usersService: UsersService) {}
 
-  // TODO: Update when users filters are ready on the backend
   checkEmail(email: string): Observable<User | void> {
+    // TODO: Update this method when users filters are ready on the backend
     return this.http.get<User | void>(`${this.apiUrl}/users`, {
       params: { email },
-    }).pipe(
-      tap((value) => console.log(value)),
-    );
+    });
   }
 
   createUser(user: UserData): Observable<any> {

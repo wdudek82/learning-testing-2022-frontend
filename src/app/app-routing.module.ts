@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './features/auth/auth.guard';
 import { AboutComponent } from './components/about/about.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
+import { SigninComponent } from './features/auth/signin/signin.component';
 
 const routes: Routes = [
   {
@@ -12,8 +14,10 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./features/auth/auth.module').then((m) => m.AuthModule),
+    children: [
+      { path: 'signup', component: SignupComponent },
+      { path: 'signin', component: SigninComponent },
+    ],
   },
   {
     path: 'tickets',
