@@ -11,5 +11,12 @@ export interface User {
   role: UserRoles;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
+}
+
+export interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
 }

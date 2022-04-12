@@ -32,7 +32,6 @@ import { Ticket } from '../../models';
 })
 export class BacklogComponent implements OnInit {
   title = 'learning-testing-2022-frontend';
-  apiUrl = environment.apiUrl;
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
   ticketsColumns: string[] = [

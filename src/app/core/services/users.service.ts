@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models';
-import { Observable, of } from 'rxjs';
+import {Observable, of, tap} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -18,13 +18,5 @@ export class UsersService {
 
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/${id}`);
-  }
-
-  // TODO: Update when users filters are ready on the backend
-  checkEmail(email: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users`, {
-      // params: { email: encodeURIComponent(email) },
-      params: { email },
-    });
   }
 }
