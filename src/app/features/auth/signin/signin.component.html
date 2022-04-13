@@ -1,23 +1,35 @@
 <mat-card>
   <mat-card-content>
-    <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <h2>Log In</h2>
-      <mat-error *ngIf="!isLoginValid">
-        The username and password were not recognized
-      </mat-error>
+
       <mat-form-field>
-        <input matInput placeholder="Email" [(ngModel)]="username" name="username" required>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email"/>
         <mat-error>
-          Please provide a valid email address
+          {{ getErrorMessage(email) }}
         </mat-error>
       </mat-form-field>
+
       <mat-form-field>
-        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
-        <mat-error>
-          Please provide a valid password
-        </mat-error>
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" [type]="inputType"/>
+        <mat-error>{{ getErrorMessage(password) }}</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Submit</button>
+
+      <!-- TODO: Login error -->
+      <!--      <mat-error *ngIf="">-->
+      <!--        The username and password were not recognized-->
+      <!--      </mat-error>-->
+
+      <button mat-raised-button color="primary" [disabled]="form.invalid">
+        Submit
+      </button>
+      <button
+        mat-icon-button (click)="hidePassword = !hidePassword"
+        [matTooltip]="hidePassword ? 'Show passwords' : 'Hide passwords'" type="button">
+        <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </button>
     </form>
   </mat-card-content>
 </mat-card>

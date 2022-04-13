@@ -10,7 +10,6 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { environment } from '../../../../../environments/environment';
 import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
 import { TicketsService } from '../../tickets.service';
 import { Ticket } from '../../models';

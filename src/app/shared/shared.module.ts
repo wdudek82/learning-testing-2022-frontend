@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { InputComponent } from './components/input/input.component';
+import { InputErrorComponent } from './components/input-error/input-error.component';
 
 const vendorModules = [
   CommonModule,
@@ -47,10 +48,10 @@ const materialModules = [
   DragDropModule,
 ];
 
-const components = [InputComponent];
+const components = [InputComponent, InputErrorComponent];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...components, InputErrorComponent],
   imports: [...vendorModules, ...materialModules],
   exports: [...vendorModules, ...materialModules, ...components],
 })

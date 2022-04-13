@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UsersService } from '../../core/services/users.service';
-import {Observable, tap} from "rxjs";
-import {User, UserData} from "../../core/models";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
+import { Observable, tap } from 'rxjs';
+import { User, UserData } from '../../core/models';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +22,12 @@ export class AuthService {
 
   createUser(user: UserData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/create-user`, user);
+  }
+
+  signin(email: string, password: string): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/auth/signin`, {
+      email,
+      password,
+    });
   }
 }

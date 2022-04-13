@@ -1,12 +1,12 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Ticket } from "../../models";
-import { Observable, Subscription } from "rxjs";
-import { User } from "../../../../core/models";
-import { UsersService } from "../../../../core/services/users.service";
-import { TicketsService } from "../../tickets.service";
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Observable, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '@core/models';
+import { UsersService } from '@core/services/users.service';
+import { Ticket } from '@tickets/models';
+import { TicketsService } from '@tickets/tickets.service';
 
 @Component({
   selector: 'app-ticket-details-modal',
@@ -71,9 +71,15 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     const nawTicket = {
       ...this.form.value,
       authorId: 5,
-    }
-    this.ticketsService.createTicket(nawTicket).subscribe(() => {
-      this.onClose();
+    };
+    this.ticketsService.createTicket(nawTicket).subscribe({
+      next: () => {
+        this.onClose();
+        this.toastr.success('A new ticket has been created', 'Success');
+      },
+      error: (_err) => {
+        this.toastr.error('Something went wrong', 'Error');
+      }
     });
   }
 
