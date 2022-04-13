@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ToastrModule } from 'ngx-toastr';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthHttpInterceptor } from '@core/interceptors/auth-http.interceptor';
 
 @NgModule({
   declarations: [MainLayoutComponent],
@@ -24,5 +26,8 @@ import { ToastrModule } from 'ngx-toastr';
     }),
   ],
   exports: [MainLayoutComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+  ],
 })
 export class CoreModule {}

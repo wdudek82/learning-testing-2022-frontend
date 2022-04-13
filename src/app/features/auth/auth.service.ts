@@ -38,9 +38,7 @@ export class AuthService {
   signIn(credentials: SigninCredentials): Observable<SigninResponse> {
     // TODO: return only a username or id
     return this.http
-      .post<SigninResponse>(`${this.apiUrl}/auth/signin`, credentials, {
-        withCredentials: true,
-      })
+      .post<SigninResponse>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
         tap((data) => {
           this.signedInSubject.next(true);
@@ -55,7 +53,7 @@ export class AuthService {
 
   checkAuth(): Observable<any> {
     return this.http
-      .get<any>(`${this.apiUrl}/auth/whoami`, { withCredentials: true })
+      .get<any>(`${this.apiUrl}/auth/whoami`)
       .pipe(
         tap((res) => {
           console.log(res);
