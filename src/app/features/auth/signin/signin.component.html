@@ -5,7 +5,7 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email"/>
+        <input matInput formControlName="email" />
         <mat-error>
           {{ getInputErrorMessage(email) }}
         </mat-error>
@@ -13,19 +13,24 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" [type]="inputType"/>
+        <input matInput formControlName="password" [type]="inputType" />
         <mat-error>{{ getInputErrorMessage(password) }}</mat-error>
       </mat-form-field>
 
-      <mat-error>{{getFormErrorMessage()}}</mat-error>
+      <mat-error>{{ getFormErrorMessage() }}</mat-error>
 
       <button mat-raised-button color="primary" [disabled]="form.invalid">
         Submit
       </button>
       <button
-        mat-icon-button (click)="hidePassword = !hidePassword"
-        [matTooltip]="hidePassword ? 'Show passwords' : 'Hide passwords'" type="button">
-        <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+        mat-icon-button
+        (click)="hidePassword = !hidePassword"
+        [matTooltip]="hidePassword ? 'Show passwords' : 'Hide passwords'"
+        type="button"
+      >
+        <mat-icon>{{
+          hidePassword ? 'visibility' : 'visibility_off'
+        }}</mat-icon>
       </button>
     </form>
   </mat-card-content>

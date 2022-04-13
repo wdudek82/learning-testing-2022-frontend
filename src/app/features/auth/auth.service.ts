@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '@environments/environment';
 import { UsersService } from '@core/services/users.service';
 import { User } from '@core/models';
@@ -16,6 +16,8 @@ import {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  private signedInSubject = new BehaviorSubject<boolean>(false);
+  signedIn$ = this.signedInSubject.asObservable();
 
   constructor(private http: HttpClient, private usersService: UsersService) {}
 
@@ -33,11 +35,31 @@ export class AuthService {
     );
   }
 
-  signin(credentials: SigninCredentials): Observable<SigninResponse> {
+  signIn(credentials: SigninCredentials): Observable<SigninResponse> {
     // TODO: return only a username or id
-    return this.http.post<SigninResponse>(
-      `${this.apiUrl}/auth/signin`,
-      credentials,
-    );
+    return this.http
+      .post<SigninResponse>(`${this.apiUrl}/auth/signin`, credentials, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((data) => {
+          this.signedInSubject.next(true);
+          localStorage.setItem('user', JSON.stringify(data));
+        }),
+      );
+  }
+
+  signOut(): void {
+    this.signedInSubject.next(false);
+  }
+
+  checkAuth(): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/auth/whoami`, { withCredentials: true })
+      .pipe(
+        tap((res) => {
+          console.log(res);
+        }),
+      );
   }
 }

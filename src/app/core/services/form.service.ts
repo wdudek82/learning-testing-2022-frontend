@@ -42,6 +42,9 @@ export class FormService {
     if (formGroup.hasError('incorrectPassword')) {
       return 'Incorrect password';
     }
+    if (formGroup.hasError('inactiveAccount')) {
+      return 'Inactive account';
+    }
     return '';
   }
 }

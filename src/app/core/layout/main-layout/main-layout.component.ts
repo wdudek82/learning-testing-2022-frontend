@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth/auth.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -6,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-  isLoggedIn = true;
+  isAuthenticated$ = new Observable<boolean>();
 
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isAuthenticated$ = this.authService.signedIn$;
+  }
+
+  signout() {
+    this.authService.signOut();
+    this.router.navigateByUrl('/auth/signin');
+  }
 }

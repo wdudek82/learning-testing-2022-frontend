@@ -140,6 +140,8 @@ export class SignupComponent implements OnInit {
         // this.authForm.updateValueAndValidity();
       },
       error: (err) => {
+        console.log(err.status)
+
         let title = err?.error?.error ? err.error.error : 'Error';
         let message = 'Something went wrong';
         if (err?.error?.message) {

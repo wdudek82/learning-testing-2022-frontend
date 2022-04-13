@@ -9,6 +9,7 @@ import { FormService } from '@core/services/form.service';
 import { InputType } from '@shared/models/form';
 import { AuthService } from '@auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -21,6 +22,7 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     private formService: FormService,
     private authService: AuthService,
     private toastr: ToastrService,
@@ -61,23 +63,28 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.form.value);
     if (this.form.invalid) return;
-    this.authService.signin(this.form.value).subscribe({
+    this.authService.signIn(this.form.value).subscribe({
       next: (res) => {
         this.toastr.success('You are now logged in', 'Welcome!');
+        this.router.navigateByUrl('/tickets');
       },
       error: (err) => {
-        console.log(err.status);
+        console.log(err);
         switch (err.status) {
           case 404:
             this.form.setErrors({ accountNotFound: true });
             break;
           case 400:
-            this.form.setErrors({ incorrectPassword: true });
+            const { message } = err.error;
+            if (message === 'inactive account') {
+              this.form.setErrors({ inactiveAccount: true })
+            } else if (message === 'incorrect password') {
+              this.form.setErrors({ incorrectPassword: true });
+            }
             break;
           case 0:
-            this.toastr.error('No internet connection', 'Connection Error');
+            this.toastr.error("Could not connect with server", 'Connection Error');
             break;
           default:
             this.toastr.error('Something went wrong', 'Error');

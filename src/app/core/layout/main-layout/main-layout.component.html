@@ -1,54 +1,80 @@
 <mat-toolbar color="primary">
   <span class="brand">Jeera</span>
 
-  <ng-container *ngIf="isLoggedIn">
+  <ng-container *ngIf="isAuthenticated$ | async">
     <button
       mat-flat-button
       color="primary"
       routerLink="/tickets"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{exact: true}">
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <mat-icon>list</mat-icon>
       Backlog
     </button>
 
-    <button mat-flat-button color="primary" routerLink="/tickets/board" routerLinkActive="active" disabled>
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/tickets/board"
+      routerLinkActive="active"
+      disabled
+    >
       <mat-icon>dashboard</mat-icon>
       Board
     </button>
 
-    <button mat-flat-button color="primary" routerLink="/users" routerLinkActive="active">
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/users"
+      routerLinkActive="active"
+    >
       <mat-icon>manage_accounts</mat-icon>
       Manage Users
     </button>
   </ng-container>
 
-  <button mat-flat-button color="primary" routerLink="/about" routerLinkActive="active">
+  <button
+    mat-flat-button
+    color="primary"
+    routerLink="/about"
+    routerLinkActive="active"
+  >
     <mat-icon>help_outline</mat-icon>
     About
   </button>
 
   <span class="navbar-spacer"></span>
 
+  <!--  <button mat-flat-button color="primary" (click)="isLoggedIn = !isLoggedIn">-->
+  <!--    <mat-icon>person_add</mat-icon>-->
+  <!--    Toggle Login State-->
+  <!--  </button>-->
 
-  <button mat-flat-button color="primary" (click)="isLoggedIn = !isLoggedIn">
-    <mat-icon>person_add</mat-icon>
-    Toggle Login State
-  </button>
-
-  <ng-container *ngIf="isLoggedIn; else signupOrSignout">
-    <button mat-flat-button color="primary" routerLink="/auth/signout" routerLinkActive="active">
+  <ng-container *ngIf="isAuthenticated$ | async; else signupOrSignout">
+    <button mat-flat-button color="primary" (click)="signout()">
       <mat-icon>logout</mat-icon>
       Sign Out
     </button>
   </ng-container>
 
   <ng-template #signupOrSignout>
-    <button mat-flat-button color="primary" routerLink="/auth/signup" routerLinkActive="active">
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/auth/signup"
+      routerLinkActive="active"
+    >
       <mat-icon>person_add</mat-icon>
       Sign Up
     </button>
-    <button mat-flat-button color="primary" routerLink="/auth/signin" routerLinkActive="active">
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/auth/signin"
+      routerLinkActive="active"
+    >
       <mat-icon>login</mat-icon>
       Sign In
     </button>
