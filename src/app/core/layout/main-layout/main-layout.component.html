@@ -47,15 +47,12 @@
 
   <span class="navbar-spacer"></span>
 
-  <!--  <button mat-flat-button color="primary" (click)="isLoggedIn = !isLoggedIn">-->
-  <!--    <mat-icon>person_add</mat-icon>-->
-  <!--    Toggle Login State-->
-  <!--  </button>-->
-
-  <ng-container *ngIf="isAuthenticated$ | async; else signupOrSignout">
+  <ng-container
+    *ngIf="isAuthenticated$ | async as signedInUser; else signupOrSignout"
+  >
     <button mat-flat-button color="primary" (click)="signout()">
       <mat-icon>logout</mat-icon>
-      Sign Out
+      Sign Out ({{ signedInUser.name }})
     </button>
   </ng-container>
 

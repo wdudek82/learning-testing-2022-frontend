@@ -1,15 +1,32 @@
-export interface SignupCredentials {
+import { User, UserRoles } from '@core/models';
+
+export interface SignUpCredentials {
   name: string;
   email: string;
   password: string;
   passwordConfirmation: string;
 }
 
-export interface SignupResponse {}
+// TODO: Finish interface
+export interface SignUpRes {}
 
-export interface SigninCredentials {
+export interface SignInCredentials {
   email: string;
   password: string;
 }
 
-export interface SigninResponse {}
+export interface SignInRes {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRoles;
+  isActive: true;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface CheckAuthRes {
+  authenticated: boolean;
+  signedInUser: Partial<User>;
+}

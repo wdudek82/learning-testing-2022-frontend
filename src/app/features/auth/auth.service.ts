@@ -5,10 +5,11 @@ import { environment } from '@environments/environment';
 import { UsersService } from '@core/services/users.service';
 import { User } from '@core/models';
 import {
-  SigninCredentials,
-  SigninResponse,
-  SignupCredentials,
-  SignupResponse,
+  CheckAuthRes,
+  SignInCredentials,
+  SignInRes,
+  SignUpCredentials,
+  SignUpRes,
 } from '@auth/models';
 
 @Injectable({
@@ -16,7 +17,7 @@ import {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private signedInSubject = new BehaviorSubject<boolean>(false);
+  private signedInSubject = new BehaviorSubject<Partial<User> | null>(null);
   signedIn$ = this.signedInSubject.asObservable();
 
   constructor(private http: HttpClient, private usersService: UsersService) {}
@@ -28,36 +29,31 @@ export class AuthService {
     });
   }
 
-  createUser(user: SignupCredentials): Observable<SignupResponse> {
-    return this.http.post<SignupResponse>(
-      `${this.apiUrl}/auth/create-user`,
-      user,
-    );
+  createUser(user: SignUpCredentials): Observable<SignUpRes> {
+    return this.http.post<SignUpRes>(`${this.apiUrl}/auth/create-user`, user);
   }
 
-  signIn(credentials: SigninCredentials): Observable<SigninResponse> {
+  signIn(credentials: SignInCredentials): Observable<SignInRes> {
     // TODO: return only a username or id
     return this.http
-      .post<SigninResponse>(`${this.apiUrl}/auth/signin`, credentials)
+      .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
-        tap((data) => {
-          this.signedInSubject.next(true);
-          localStorage.setItem('user', JSON.stringify(data));
+        tap(({ name, email, role }) => {
+          this.signedInSubject.next({ name, email, role });
         }),
       );
   }
 
   signOut(): void {
-    this.signedInSubject.next(false);
+    this.signedInSubject.next(null);
   }
 
-  checkAuth(): Observable<any> {
-    return this.http
-      .get<any>(`${this.apiUrl}/auth/whoami`)
-      .pipe(
-        tap((res) => {
-          console.log(res);
-        }),
-      );
+  checkAuth(): Observable<CheckAuthRes> {
+    return this.http.get<CheckAuthRes>(`${this.apiUrl}/auth/whoami`).pipe(
+      tap((res) => {
+        const result = res.authenticated ? res.signedInUser : null;
+        this.signedInSubject.next(result);
+      }),
+    );
   }
 }

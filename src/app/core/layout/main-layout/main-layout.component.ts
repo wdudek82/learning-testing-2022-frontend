@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth/auth.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { User } from '@core/models';
 
 @Component({
   selector: 'app-main-layout',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-  isAuthenticated$ = new Observable<boolean>();
+  isAuthenticated$ = new Observable<Partial<User> | null>();
 
   constructor(private authService: AuthService, private router: Router) {}
 

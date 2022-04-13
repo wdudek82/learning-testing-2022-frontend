@@ -9,9 +9,7 @@ import { AuthService } from '@auth/auth.service';
 export class AppComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {}
-
-  whoAmI(): void {
+  ngOnInit(): void {
     this.authService.checkAuth().subscribe();
   }
 }

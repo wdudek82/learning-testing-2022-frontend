@@ -66,7 +66,7 @@ export class SigninComponent implements OnInit {
     if (this.form.invalid) return;
     this.authService.signIn(this.form.value).subscribe({
       next: (res) => {
-        this.toastr.success('You are now logged in', 'Welcome!');
+        this.toastr.success('You are now logged in', `Hello ${res.name}!`);
         this.router.navigateByUrl('/tickets');
       },
       error: (err) => {
@@ -78,13 +78,16 @@ export class SigninComponent implements OnInit {
           case 400:
             const { message } = err.error;
             if (message === 'inactive account') {
-              this.form.setErrors({ inactiveAccount: true })
+              this.form.setErrors({ inactiveAccount: true });
             } else if (message === 'incorrect password') {
               this.form.setErrors({ incorrectPassword: true });
             }
             break;
           case 0:
-            this.toastr.error("Could not connect with server", 'Connection Error');
+            this.toastr.error(
+              'Could not connect with server',
+              'Connection Error',
+            );
             break;
           default:
             this.toastr.error('Something went wrong', 'Error');
