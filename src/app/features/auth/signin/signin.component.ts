@@ -52,22 +52,36 @@ export class SigninComponent implements OnInit {
     return this.hidePassword ? 'password' : 'text';
   }
 
-  getErrorMessage(control: AbstractControl): string {
-    return this.formService.getErrorMessage(control);
+  getInputErrorMessage(control: AbstractControl): string {
+    return this.formService.getInputErrorMessage(control);
+  }
+
+  getFormErrorMessage(): string {
+    return this.formService.getFormErrorMessage(this.form);
   }
 
   onSubmit(): void {
     console.log(this.form.value);
     if (this.form.invalid) return;
-    const { email, password } = this.form.value;
-    this.authService.signin(email, password).subscribe({
+    this.authService.signin(this.form.value).subscribe({
       next: (res) => {
-        console.log('logged in:', res);
         this.toastr.success('You are now logged in', 'Welcome!');
       },
       error: (err) => {
-        console.log(err);
-        this.toastr.error('Something went wrong', 'Error');
+        console.log(err.status);
+        switch (err.status) {
+          case 404:
+            this.form.setErrors({ accountNotFound: true });
+            break;
+          case 400:
+            this.form.setErrors({ incorrectPassword: true });
+            break;
+          case 0:
+            this.toastr.error('No internet connection', 'Connection Error');
+            break;
+          default:
+            this.toastr.error('Something went wrong', 'Error');
+        }
       },
     });
   }

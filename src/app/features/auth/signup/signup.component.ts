@@ -118,8 +118,8 @@ export class SignupComponent implements OnInit {
     return this.hidePassword ? 'password' : 'text';
   }
 
-  getErrorMessage(control: AbstractControl): string {
-    return this.formService.getErrorMessage(control);
+  getInputErrorMessage(control: AbstractControl): string {
+    return this.formService.getInputErrorMessage(control);
   }
 
   onSubmit() {

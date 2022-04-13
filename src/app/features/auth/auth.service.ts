@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
-import { UsersService } from '../../core/services/users.service';
-import { Observable, tap } from 'rxjs';
-import { User, UserData } from '../../core/models';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
+import { UsersService } from '@core/services/users.service';
+import { User } from '@core/models';
+import {
+  SigninCredentials,
+  SigninResponse,
+  SignupCredentials,
+  SignupResponse,
+} from '@auth/models';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +26,18 @@ export class AuthService {
     });
   }
 
-  createUser(user: UserData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/create-user`, user);
+  createUser(user: SignupCredentials): Observable<SignupResponse> {
+    return this.http.post<SignupResponse>(
+      `${this.apiUrl}/auth/create-user`,
+      user,
+    );
   }
 
-  signin(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/auth/signin`, {
-      email,
-      password,
-    });
+  signin(credentials: SigninCredentials): Observable<SigninResponse> {
+    // TODO: return only a username or id
+    return this.http.post<SigninResponse>(
+      `${this.apiUrl}/auth/signin`,
+      credentials,
+    );
   }
 }

@@ -9,6 +9,7 @@
       "@auth/*": ["src/app/features/auth/*"],
       "@tickets/*": ["src/app/features/tickets/*"],
       "@users-management/*": ["src/app/features/users-management/*"],
+      "@environments/*": ["src/environments/*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

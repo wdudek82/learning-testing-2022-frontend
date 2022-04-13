@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import {AbstractControl, FormGroup} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -7,28 +7,41 @@ import { AbstractControl } from '@angular/forms';
 export class FormService {
   constructor() {}
 
-  getErrorMessage(control: AbstractControl): string {
-    if (control?.hasError('required')) {
+  getInputErrorMessage(control: AbstractControl): string {
+    if (control.hasError('required')) {
       return 'Field is required';
     }
-    if (control?.hasError('minlength')) {
-      const requiredLength = control?.getError('minlength')['requiredLength'];
+    if (control.hasError('minlength')) {
+      const requiredLength = control.getError('minlength')['requiredLength'];
       return `Provided value is too short (should be at least ${requiredLength} characters)`;
     }
-    if (control?.hasError('maxlength')) {
-      const requiredLength = control?.getError('maxlength')['requiredLength'];
+    if (control.hasError('maxlength')) {
+      const requiredLength = control.getError('maxlength')['requiredLength'];
       return `Provided value is too long (should be at most ${requiredLength} characters)`;
     }
-    if (control?.hasError('pattern')) {
+    if (control.hasError('pattern')) {
       return 'Incorrect format';
     }
-    if (control?.hasError('email')) {
+    if (control.hasError('email')) {
       return 'Please provide a valid email address';
     }
-    if (control?.hasError('emailIsNotUnique')) {
+    if (control.hasError('emailIsNotUnique')) {
       return 'E-mail address is already in use';
     }
 
+    return '';
+  }
+
+  getFormErrorMessage(formGroup: FormGroup): string {
+    // if (formGroup.hasError('noConnection')) {
+    //   return 'No connection';
+    // }
+    if (formGroup.hasError('accountNotFound')) {
+      return 'Account not found';
+    }
+    if (formGroup.hasError('incorrectPassword')) {
+      return 'Incorrect password';
+    }
     return '';
   }
 }

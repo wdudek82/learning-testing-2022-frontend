@@ -3,24 +3,21 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <h2>Log In</h2>
 
-      <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email"/>
         <mat-error>
-          {{ getErrorMessage(email) }}
+          {{ getInputErrorMessage(email) }}
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" [type]="inputType"/>
-        <mat-error>{{ getErrorMessage(password) }}</mat-error>
+        <mat-error>{{ getInputErrorMessage(password) }}</mat-error>
       </mat-form-field>
 
-      <!-- TODO: Login error -->
-      <!--      <mat-error *ngIf="">-->
-      <!--        The username and password were not recognized-->
-      <!--      </mat-error>-->
+      <mat-error>{{getFormErrorMessage()}}</mat-error>
 
       <button mat-raised-button color="primary" [disabled]="form.invalid">
         Submit

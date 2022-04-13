@@ -85,6 +85,7 @@ export class BacklogComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    // TODO: after successful drag and drop store new posisions values in the Database
     moveItemInArray(this.tickets, event.previousIndex, event.currentIndex);
     this.recalculateTicketPositions();
     this.ticketsDataSource = new MatTableDataSource<any>(this.tickets);

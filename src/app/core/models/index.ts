@@ -14,9 +14,3 @@ export interface User {
   deletedAt: string | null;
 }
 
-export interface UserData {
-  name: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-}
