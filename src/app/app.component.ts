@@ -12,4 +12,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.checkAuth().subscribe();
   }
+
+  whoAmI(): void {
+    this.authService.checkAuth().subscribe((res) => {
+      console.log(res);
+    });
+  }
 }
