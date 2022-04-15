@@ -1,16 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './features/auth/auth.guard';
-import { AboutComponent } from './components/about/about.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { SignupComponent } from './features/auth/signup/signup.component';
-import { SigninComponent } from './features/auth/signin/signin.component';
+import { AuthGuard } from '@auth/auth.guard';
+import { SignupComponent } from '@auth/signup/signup.component';
+import { SigninComponent } from '@auth/signin/signin.component';
+import { HomeComponent } from '@core/components/home/home.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'about',
+    redirectTo: 'home',
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: 'auth',
@@ -37,10 +41,6 @@ const routes: Routes = [
         (m) => m.UsersManagementModule,
       ),
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'about',
-    component: AboutComponent,
   },
   {
     path: '**',

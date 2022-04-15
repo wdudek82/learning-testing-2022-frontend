@@ -20,7 +20,7 @@ export class AuthService {
   private signedInSubject = new BehaviorSubject<Partial<User> | null>(null);
   signedIn$ = this.signedInSubject.asObservable();
 
-  constructor(private http: HttpClient, private usersService: UsersService) {}
+  constructor(private http: HttpClient) {}
 
   checkEmail(email: string): Observable<User | void> {
     // TODO: Update this method when users filters are ready on the backend

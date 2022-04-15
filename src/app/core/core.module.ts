@@ -9,9 +9,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@core/interceptors/auth-http.interceptor';
+import { HomeComponent } from '@core/components/home/home.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
+
+const components = [HomeComponent, MainLayoutComponent, PageNotFoundComponent];
 
 @NgModule({
-  declarations: [MainLayoutComponent],
+  declarations: [...components],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -25,7 +29,7 @@ import { AuthHttpInterceptor } from '@core/interceptors/auth-http.interceptor';
       preventDuplicates: true,
     }),
   ],
-  exports: [MainLayoutComponent],
+  exports: [...components],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
   ],

@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -21,7 +21,8 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean | UrlTree> {
     return this.authService.signedIn$.pipe(
       map((s) => {
-        return s ? true : this.router.parseUrl('/auth/signin');
+        console.log('auth guard result:', s);
+        return !!s || this.router.parseUrl('/auth/signin');
       }),
     );
   }
