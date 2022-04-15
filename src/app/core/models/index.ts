@@ -9,6 +9,7 @@ export interface User {
   name: string;
   email: string;
   role: UserRoles;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

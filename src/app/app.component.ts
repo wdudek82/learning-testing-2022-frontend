@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth/auth.service';
+import { Observable } from 'rxjs';
+import { User } from '@core/models';
 
 @Component({
   selector: 'app-root',
@@ -7,15 +9,13 @@ import { AuthService } from '@auth/auth.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  signedIn$!: Observable<Partial<User> | null>;
+
+  constructor(private authService: AuthService) {
+    this.signedIn$ = this.authService.signedIn$;
+  }
 
   ngOnInit(): void {
     this.authService.checkAuth().subscribe();
-  }
-
-  whoAmI(): void {
-    this.authService.checkAuth().subscribe((res) => {
-      console.log(res);
-    });
   }
 }

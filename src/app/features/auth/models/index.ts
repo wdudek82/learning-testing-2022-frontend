@@ -7,26 +7,20 @@ export interface SignUpCredentials {
   passwordConfirmation: string;
 }
 
-// TODO: Finish interface
-export interface SignUpRes {}
+export interface SignUpRes extends User {}
 
 export interface SignInCredentials {
   email: string;
   password: string;
 }
 
-export interface SignInRes {
-  id: number;
-  name: string;
-  email: string;
-  role: UserRoles;
-  isActive: true;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-}
+export interface SignInRes extends User {}
 
 export interface CheckAuthRes {
   authenticated: boolean;
-  signedInUser: Partial<User>;
+  signedInUser: {
+    email: string;
+    name: string;
+    role: UserRoles;
+  };
 }

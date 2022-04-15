@@ -10,16 +10,16 @@ import { User } from '@core/models';
   styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-  isAuthenticated$ = new Observable<Partial<User> | null>();
+  signedIn$!: Observable<Partial<User> | null>;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.isAuthenticated$ = this.authService.signedIn$;
+    this.signedIn$ = this.authService.signedIn$;
   }
 
-  signout() {
-    this.authService.signOut();
+  signOut() {
+    this.authService.signOut().subscribe();
     this.router.navigateByUrl('/auth/signin');
   }
 }

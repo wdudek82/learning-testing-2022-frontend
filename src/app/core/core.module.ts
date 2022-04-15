@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ToastrModule } from 'ngx-toastr';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthHttpInterceptor } from '@core/interceptors/auth-http.interceptor';
-import { HomeComponent } from '@core/components/home/home.component';
-import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
+import { AuthHttpInterceptor } from './interceptors/auth-http.interceptor';
+import { HomeComponent } from './components/home/home.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 const components = [HomeComponent, MainLayoutComponent, PageNotFoundComponent];
 

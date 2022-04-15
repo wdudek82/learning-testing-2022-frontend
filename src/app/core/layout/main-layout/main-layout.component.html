@@ -11,7 +11,7 @@
     Home
   </button>
 
-  <ng-container *ngIf="isAuthenticated$ | async">
+  <ng-container *ngIf="signedIn$ | async">
     <button
       mat-flat-button
       color="primary"
@@ -48,9 +48,9 @@
   <span class="navbar-spacer"></span>
 
   <ng-container
-    *ngIf="isAuthenticated$ | async as signedInUser; else signupOrSignout"
+    *ngIf="signedIn$ | async as signedInUser; else signupOrSignout"
   >
-    <button mat-flat-button color="primary" (click)="signout()">
+    <button mat-flat-button color="primary" (click)="signOut()">
       <mat-icon>logout</mat-icon>
       Sign Out ({{ signedInUser.name }})
     </button>

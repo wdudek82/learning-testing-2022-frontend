@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean | UrlTree> {
     return this.authService.signedIn$.pipe(
       map((s) => {
-        console.log('auth guard result:', s);
         return !!s || this.router.parseUrl('/auth/signin');
       }),
     );

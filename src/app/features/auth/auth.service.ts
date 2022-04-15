@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '@environments/environment';
-import { UsersService } from '@core/services/users.service';
 import { User } from '@core/models';
 import {
   CheckAuthRes,
@@ -29,6 +28,14 @@ export class AuthService {
     });
   }
 
+  checkAuth(): Observable<CheckAuthRes> {
+    return this.http.get<CheckAuthRes>(`${this.apiUrl}/auth/whoami`).pipe(
+      tap((res) => {
+        this.signedInSubject.next(res.signedInUser);
+      }),
+    );
+  }
+
   createUser(user: SignUpCredentials): Observable<SignUpRes> {
     return this.http.post<SignUpRes>(`${this.apiUrl}/auth/create-user`, user);
   }
@@ -44,15 +51,10 @@ export class AuthService {
       );
   }
 
-  signOut(): void {
-    this.signedInSubject.next(null);
-  }
-
-  checkAuth(): Observable<CheckAuthRes> {
-    return this.http.get<CheckAuthRes>(`${this.apiUrl}/auth/whoami`).pipe(
-      tap((res) => {
-        const result = res.authenticated ? res.signedInUser : null;
-        this.signedInSubject.next(result);
+  signOut(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/auth/signout`, {}).pipe(
+      tap(() => {
+        this.signedInSubject.next(null);
       }),
     );
   }
