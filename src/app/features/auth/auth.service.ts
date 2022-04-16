@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable, ReplaySubject, tap } from 'rxjs';
 import { environment } from '@environments/environment';
 import { User } from '@core/models';
 import {
@@ -16,7 +16,7 @@ import {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private signedInSubject = new BehaviorSubject<Partial<User> | null>(null);
+  private signedInSubject = new ReplaySubject<Partial<User> | null>(1);
   signedIn$ = this.signedInSubject.asObservable();
 
   constructor(private http: HttpClient) {}

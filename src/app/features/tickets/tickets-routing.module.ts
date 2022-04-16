@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BacklogComponent } from './components/backlog/backlog.component';
 import { BoardComponent } from './components/board/board.component';
-import { AuthGuard } from '@auth/auth.guard';
+import { AuthGuard } from '@auth/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -10,7 +10,7 @@ const routes: Routes = [
     component: BacklogComponent,
     pathMatch: 'full',
   },
-  { path: 'board', component: BoardComponent },
+  { path: 'board', component: BoardComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
