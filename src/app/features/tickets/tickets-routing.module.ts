@@ -3,14 +3,21 @@ import { RouterModule, Routes } from '@angular/router';
 import { BacklogComponent } from './components/backlog/backlog.component';
 import { BoardComponent } from './components/board/board.component';
 import { AuthGuard } from '@auth/guards/auth.guard';
+import { TicketsResolver } from '@tickets/tickets.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: BacklogComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
+    component: BacklogComponent,
+    resolve: { tickets: TicketsResolver },
   },
-  { path: 'board', component: BoardComponent, canActivate: [AuthGuard] },
+  {
+    path: 'board',
+    canActivate: [AuthGuard],
+    component: BoardComponent,
+  },
 ];
 
 @NgModule({

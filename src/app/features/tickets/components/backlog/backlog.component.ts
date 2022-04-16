@@ -13,6 +13,8 @@ import {
 import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
 import { TicketsService } from '../../tickets.service';
 import { Ticket } from '../../models';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-backlog',
@@ -48,6 +50,7 @@ export class BacklogComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private route: ActivatedRoute,
     public dialog: MatDialog,
     private ticketsService: TicketsService,
   ) {}
@@ -57,10 +60,14 @@ export class BacklogComponent implements OnInit {
   }
 
   loadTickets(): void {
-    this.ticketsService.getTickets().subscribe((tickets) => {
+    this.route.data.pipe(
+      map(({tickets}) => {
+        this.interpolateTicketsIds();
+        this.calculateTicketsPositions();
+        return tickets;
+      }),
+    ).subscribe((tickets) => {
       this.tickets = tickets;
-      this.interpolateTicketsIds();
-      this.recalculateTicketPositions();
       this.ticketsDataSource = new MatTableDataSource<Ticket>(tickets);
     });
   }
@@ -72,7 +79,7 @@ export class BacklogComponent implements OnInit {
     });
   }
 
-  recalculateTicketPositions(): void {
+  calculateTicketsPositions(): void {
     this.tickets.map((t, index) => {
       t.position = index + 1;
       return t;
@@ -85,9 +92,9 @@ export class BacklogComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    // TODO: after successful drag and drop store new posisions values in the Database
+    // TODO: after successful drag and drop store new positions values in the Database
     moveItemInArray(this.tickets, event.previousIndex, event.currentIndex);
-    this.recalculateTicketPositions();
+    this.calculateTicketsPositions();
     this.ticketsDataSource = new MatTableDataSource<any>(this.tickets);
   }
 

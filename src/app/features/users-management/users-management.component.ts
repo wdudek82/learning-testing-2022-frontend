@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "../../core/models";
-import {UsersService} from "../../core/services/users.service";
+import {User} from '@core/models';
+import {UsersService} from '@core/services/users.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-users-management',
@@ -14,20 +15,17 @@ export class UsersManagementComponent implements OnInit {
     'email',
     'role',
     'isActive',
-    // 'createdAt',
-    // 'updatedAt',
-    // 'deletedAt',
   ];
   users: User[] = [];
 
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.getUsers();
   }
 
   getUsers(): void {
-    this.usersService.getUsers().subscribe((users) => {
+    this.route.data.subscribe(({users}) => {
       this.users = users;
     });
   }

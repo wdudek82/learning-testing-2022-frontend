@@ -6,7 +6,6 @@ import { SignupComponent } from '@auth/signup/signup.component';
 import { SigninComponent } from '@auth/signin/signin.component';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { SignedInGuard } from '@auth/guards/signed-in.guard';
-import { SignoutComponent } from '@auth/signout/signout.component';
 
 const routes: Routes = [
   {
@@ -28,7 +27,6 @@ const routes: Routes = [
     children: [
       { path: 'signup', component: SignupComponent },
       { path: 'signin', component: SigninComponent },
-      { path: 'signout', component: SignoutComponent },
     ],
     canActivate: [SignedInGuard],
   },

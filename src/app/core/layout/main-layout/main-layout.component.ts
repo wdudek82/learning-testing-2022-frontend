@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth/auth.service';
-import { Observable } from 'rxjs';
+import { first, Observable, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '@core/models';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main-layout',
@@ -12,14 +13,27 @@ import { User } from '@core/models';
 export class MainLayoutComponent implements OnInit {
   signedIn$!: Observable<Partial<User> | null>;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private toastr: ToastrService,
+  ) {}
 
   ngOnInit(): void {
     this.signedIn$ = this.authService.signedIn$;
   }
 
   signOut() {
-    this.authService.signOut().subscribe();
-    this.router.navigateByUrl('/auth/signin');
+    this.authService.signedIn$
+      .pipe(
+        first(),
+        tap((user) =>
+          this.toastr.success(`See you later ${user?.name}!`, 'Signed out!'),
+        ),
+        switchMap(() => this.authService.signOut()),
+      )
+      .subscribe((value) => {
+        this.router.navigateByUrl('/auth/signin');
+      });
   }
 }
