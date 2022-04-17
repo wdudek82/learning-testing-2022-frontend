@@ -44,8 +44,8 @@ or use script: `npm run deploy:gh`
 
 - [ ] better error handling (interceptor, error pages)
 - [ ] separate sign-out page (?)
-- [ ] signup form should not has validation triggered after submitting
-- [ ] signout view
+- [ ] signup view
+  - [ ] validation should not be triggered on submitting
   - [ ] email uniqueness checked only on submit
   - [ ] separate "show password" buttons for "password" and "password confirmation"
   - [ ] password mismatch error visible only under password confirmation
