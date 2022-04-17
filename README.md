@@ -54,7 +54,10 @@ or use script: `npm run deploy:gh`
   - [x] editing existing tickets
   - [x] enable table pagination
   - [ ] include ticket id in details modal when updating
-  - [ ] removing tickets - design needed (should "Done" and "Cancelled" be hidden?)
+  - [ ] drag & drop breaks pagination
+  - [ ] change formatting for priority and status in table (remove underscore and add title case)
+  - [ ] removing tickets (only soft delete)
+  - [ ] "Done" and "Cancelled" should be hidden by default (but searchable)
   - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
