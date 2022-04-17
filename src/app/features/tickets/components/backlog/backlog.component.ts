@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { DialogOverviewExample } from '../dialog-overview-example/dialog-overview-example.component';
 import {
   animate,
   state,
@@ -11,19 +10,11 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { environment } from '../../../../../environments/environment';
-
-interface Ticket {
-  id: number | string;
-  title: string;
-  description: string;
-  priority: string;
-  status: string;
-  position: number | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-}
+import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
+import { Ticket } from '../../models';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '@core/models';
+import { PROJECT_ALIAS } from '@core/models/constants';
 
 @Component({
   selector: 'app-backlog',
@@ -42,47 +33,47 @@ interface Ticket {
 })
 export class BacklogComponent implements OnInit {
   title = 'learning-testing-2022-frontend';
-  apiUrl = environment.apiUrl;
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
-  ticketsColumns: string[] = [];
+  ticketsColumns: string[] = ['id', 'title', 'priority', 'status'];
   expandedElement?: Ticket | null;
+  users: User[] = [];
+  signedInUserId!: number;
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.getTickets();
+    this.getUsers();
   }
 
   getTickets(): void {
-    this.http.get<Ticket[]>(this.apiUrl + '/tickets').subscribe((tickets) => {
-      console.log(tickets);
-      this.ticketsColumns = [
-        'id',
-        // 'position',
-        'title',
-        // 'description',
-        'priority',
-        'status',
-        // 'createdAt',
-        // 'updatedAt',
-        // 'deletedAt',
-      ];
-      this.tickets = tickets || [];
-      this.interpolateTicketsIds();
-      this.recalculateTicketPositions();
-      this.ticketsDataSource = new MatTableDataSource<Ticket>(tickets);
+    this.route.data.subscribe(({ tickets, users }) => {
+      this.tickets = tickets;
+      this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      // this.calculateTicketsPositions();
     });
   }
 
-  interpolateTicketsIds(): void {
-    this.tickets.map((t, index) => {
-      t.id = `LT-${t.id}`;
-      return t;
+  getUsers(): void {
+    this.route.data.subscribe(({ users, signedInUserId }) => {
+      this.users = users;
+      this.signedInUserId = signedInUserId;
     });
   }
 
-  recalculateTicketPositions(): void {
+  getTableCellValue(column: string, element: string): string {
+    // TODO: The main function of this method id adding PROJECT_ALIAS before
+    //  ticket id. Probably overkill/messy solution.
+    //  Maybe directive would be better? Or pipe? Filter? What would be cleaner?
+    return column === 'id' ? `${PROJECT_ALIAS}-${element}` : element;
+  }
+
+  calculateTicketsPositions(): void {
     this.tickets.map((t, index) => {
       t.position = index + 1;
       return t;
@@ -94,33 +85,34 @@ export class BacklogComponent implements OnInit {
     this.ticketsDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  addData() {}
-
-  // addData() {
-  //   const randomElementIndex = Math.floor(Math.random() * ELEMENT_DATA.length);
-  //   this.dataSource.push(ELEMENT_DATA[randomElementIndex]);
-  //   this.table.renderRows();
-  // }
-  // addData() {
-  //   const randomElementIndex = Math.floor(Math.random() * ELEMENT_DATA.length);
-  //   this.dataToDisplay = [...this.dataToDisplay, ELEMENT_DATA[randomElementIndex]];
-  //   this.dataSource.setData(this.dataToDisplay);
-  // }
-
   drop(event: CdkDragDrop<string[]>) {
+    // TODO: after successful drag and drop store new positions values in the Database
     moveItemInArray(this.tickets, event.previousIndex, event.currentIndex);
-    this.recalculateTicketPositions();
+    this.calculateTicketsPositions();
     this.ticketsDataSource = new MatTableDataSource<any>(this.tickets);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExample, {
-      width: '250px',
-      data: {},
-    });
-
+  createNewTicket(): void {
+    const dialogConfig = {
+      width: '700px',
+      data: {
+        tickets: this.tickets,
+        users: this.users,
+        authorId: this.signedInUserId,
+      },
+      disableClose: true,
+    };
+    const dialogRef = this.dialog.open(
+      TicketDetailsModalComponent,
+      dialogConfig,
+    );
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`The dialog was closed. Result: ${result}`);
+      this.getTickets();
     });
+  }
+
+  updateTicket(): void {
+    // TODO: Open modal with the existing ticket data
   }
 }

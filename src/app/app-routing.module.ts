@@ -1,37 +1,54 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SigninComponent } from './components/signin/signin.component';
-import { AuthGuard } from './auth.guard';
-import { AboutComponent } from './components/about/about.component';
-import { SignupComponent } from './components/signup/signup.component';
+import { HomeComponent } from '@core/components/home/home.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
+import { SignupComponent } from '@auth/signup/signup.component';
+import { SigninComponent } from '@auth/signin/signin.component';
+import { AuthGuard } from '@auth/guards/auth.guard';
+import { SignedInGuard } from '@auth/guards/signed-in.guard';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'about',
+    redirectTo: 'home',
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+  },
+  {
+    path: 'auth',
+    pathMatch: 'full',
+    redirectTo: 'auth/signin',
+  },
+  {
+    path: 'auth',
+    children: [
+      { path: 'signup', component: SignupComponent },
+      { path: 'signin', component: SigninComponent },
+    ],
+    canActivate: [SignedInGuard],
   },
   {
     path: 'tickets',
     loadChildren: () =>
       import('./features/tickets/tickets.module').then((m) => m.TicketsModule),
+    // TODO: add tickets resolver
     canActivate: [AuthGuard],
   },
   {
     path: 'users',
     loadChildren: () =>
-      import('./features/users/users.module').then((m) => m.UsersModule),
+      import('./features/users-management/users-management.module').then(
+        (m) => m.UsersManagementModule,
+      ),
+    // TODO: add users resolver
     canActivate: [AuthGuard],
   },
   {
-    path: 'about',
-    component: AboutComponent,
-  },
-  { path: 'signin', component: SigninComponent },
-  { path: 'signup', component: SignupComponent },
-  {
     path: '**',
-    redirectTo: 'tickets', // TODO: Create dedicated HTTP 404 Not Found page
+    component: PageNotFoundComponent,
   },
 ];
 

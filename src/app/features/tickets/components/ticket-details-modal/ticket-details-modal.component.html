@@ -1,0 +1,88 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h2>Index details modal</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+    <mat-error *ngIf="form.get('title')?.invalid">{{
+      getInputErrorMessage(form.get('title')!)
+    }}</mat-error>
+  </mat-form-field>
+
+  <section class="d-flex">
+    <mat-form-field appearance="fill" class="flex-grow-1 me-2">
+      <mat-label>Author</mat-label>
+      <mat-select formControlName="authorId">
+        <mat-option *ngFor="let author of usersOptions" [value]="author.value">
+          {{ author.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="flex-grow-1">
+      <mat-label>Assignee</mat-label>
+      <mat-select formControlName="assigneeId">
+        <mat-option
+          *ngFor="let assignee of usersOptions"
+          [value]="assignee.value"
+        >
+          {{ assignee.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section class="d-flex">
+    <mat-form-field appearance="fill" class="flex-grow-1 me-2">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.viewValue | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="flex-grow-1">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option
+          *ngFor="let priority of priorityOptions"
+          [value]="priority.value"
+        >
+          {{ priority.viewValue | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" rows="10"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Related Ticket</mat-label>
+    <mat-select formControlName="relatedTicket">
+      <mat-option *ngFor="let ticket of ticketsOptions" [value]="ticket.value">
+        {{ ticket.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="this.data.ticket?.comments as comments">
+    <div *ngFor="let comment of comments">{{ comment.content }}</div>
+  </ng-container>
+
+  <div mat-dialog-actions align="end">
+    <button
+      mat-raised-button
+      color="primary"
+      class="mr-xs"
+      [disabled]="form.invalid"
+      type="submit"
+    >
+      Submit
+    </button>
+    <button mat-raised-button (click)="onClose()" type="button">Close</button>
+  </div>
+</form>

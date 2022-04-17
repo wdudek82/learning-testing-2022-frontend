@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
+  // apiUrl: 'https://learning-testing-2022.herokuapp.com/api',
 };
 
 /*
