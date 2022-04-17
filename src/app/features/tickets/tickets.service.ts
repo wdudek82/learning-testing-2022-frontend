@@ -8,19 +8,23 @@ import { Ticket } from './models';
   providedIn: 'root',
 })
 export class TicketsService {
-  private apiUrl = environment.apiUrl;
+  private rootUrl = environment.apiUrl + '/tickets';
 
   constructor(private http: HttpClient) {}
 
   getTickets(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(this.apiUrl + '/tickets');
+    return this.http.get<Ticket[]>(this.rootUrl);
   }
 
   getTicketById(id: number): Observable<Ticket> {
-    return this.http.get<Ticket>(`${this.apiUrl}/${id}`);
+    return this.http.get<Ticket>(`${this.rootUrl}/${id}`);
   }
 
   createTicket(ticket: Ticket): Observable<Ticket> {
-    return this.http.post<Ticket>(`${this.apiUrl}/tickets`, ticket);
+    return this.http.post<Ticket>(this.rootUrl, ticket);
+  }
+
+  updateTicket(id: number, ticket: Ticket): Observable<Ticket> {
+    return this.http.patch<Ticket>(`${this.rootUrl}/${id}`, ticket);
   }
 }

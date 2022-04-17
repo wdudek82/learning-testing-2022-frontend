@@ -51,12 +51,12 @@ or use script: `npm run deploy:gh`
 - [ ] tickets
   - [x] tickets resolver
   - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
-  - [ ] editing existing tickets
+  - [x] editing existing tickets
   - [ ] sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
   - [ ] comments visible under corresponding tickets
   - [ ] adding new comments
-  - [ ] editing own comments
+  - [ ] editing (only) own comments
   - [ ] adding attachments to tickets (uploads)
   - [ ] adding attachments to comments (uploads) (?)
   - [ ] WYSIWYG editor in ticket description
@@ -64,7 +64,6 @@ or use script: `npm run deploy:gh`
   - [ ] board view
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
-  - [ ] rename "relatedTicket" to "linkedTicket" (on the BE side too)
   - [ ] pagination is not working
 - [ ] users
   - [x] users resolver

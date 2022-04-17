@@ -8,10 +8,10 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '@core/models';
-import { Priority, Ticket, TicketStatus } from '@tickets/models';
-import { TicketsService } from '@tickets/tickets.service';
 import { FormService } from '@core/services/form.service';
 import { PROJECT_ALIAS } from '@core/models/constants';
+import { Priority, Ticket, TicketStatus } from '@tickets/models';
+import { TicketsService } from '@tickets/tickets.service';
 
 export interface TicketModalData {
   tickets: Ticket[];
@@ -41,9 +41,9 @@ export class TicketDetailsModalComponent implements OnInit {
   statusOptions: SelectOption[] = this.createSelectOptionsFromStringsArray([
     TicketStatus.NEW,
     TicketStatus.TO_DO,
-    TicketStatus.IN_DESIGN,
+    TicketStatus.DESIGN,
     TicketStatus.IN_PROGRESS,
-    TicketStatus.IN_REVIEW,
+    TicketStatus.REVIEW,
     TicketStatus.TESTING,
     TicketStatus.DONE,
     TicketStatus.CANCELLED,
@@ -62,15 +62,16 @@ export class TicketDetailsModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.createForm();
     this.ticketsOptions = this.createTicketsOptions(this.data.tickets);
     this.usersOptions = this.createUsersOptions(this.data.users);
   }
 
-  initializeForm(): void {
+  createForm(): void {
+    const { ticket, authorId } = this.data;
     this.form = this.formBuilder.group({
       title: [
-        '',
+        ticket?.title ?? '',
         [
           Validators.required,
           Validators.minLength(5),
@@ -79,20 +80,20 @@ export class TicketDetailsModalComponent implements OnInit {
       ],
       authorId: [
         {
-          value: this.data.authorId,
+          value: authorId,
           disabled: true,
         },
       ],
-      assigneeId: [-1],
+      assigneeId: [ticket?.assigneeId ?? -1],
       status: [
         {
-          value: this.statusOptions[0].value,
-          disabled: !this.data.ticket
+          value: ticket?.status ?? this.statusOptions[0].value,
+          disabled: !ticket,
         },
       ],
-      priority: [this.priorityOptions[2].value],
-      description: [''],
-      relatedTicket: [''],
+      priority: [ticket?.priority ?? this.priorityOptions[2].value],
+      description: [ticket?.description ?? ''],
+      relatedTicketId: [ticket?.relatedTicketId ?? -1],
     });
   }
 
@@ -109,7 +110,7 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   createUsersOptions(users: User[]): SelectOption[] {
-    const empty: SelectOption = {value: -1, viewValue: '-'};
+    const empty: SelectOption = { value: -1, viewValue: '-' };
     const result: SelectOption[] = users.map((u) => ({
       value: u.id,
       viewValue: u.name,
@@ -118,27 +119,40 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   createTicketsOptions(tickets: Ticket[]): SelectOption[] {
-    return tickets.map((t) => ({
+    const empty: SelectOption = { value: -1, viewValue: '-' };
+    const result = tickets.map((t) => ({
       value: t.id,
       viewValue: `${PROJECT_ALIAS}-${t.id} ${t.title}`,
     }));
+    return [empty, ...result];
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    const newTicket = this.form.getRawValue();
+    const ticketForm = this.form.getRawValue();
 
-    // This is needed because of the workaround. Null assigneeId could not be used
-    // as a default value in the mat-select dropdown, and -1 had to be used instead.
-    // But -1 in this case signify that no assignee has been selected,
-    // and in such case backend expects "null" value.
-    newTicket.assigneeId = newTicket.assigneeId === -1 ? null : newTicket.assigneeId;
+    // An id of -1 is only a placeholder for null value. This is needed because null cannot be used
+    // as a default value in mat-select dropdown, and -1 has to be used instead.
+    // But it would not be recognised by the backend.
+    const { assigneeId, relatedTicketId } = ticketForm;
+    ticketForm.assigneeId = assigneeId === -1 ? null : assigneeId;
+    ticketForm.relatedTicketId = relatedTicketId === -1 ? null : relatedTicketId;
 
-    this.ticketsService.createTicket(newTicket).subscribe({
+    const { ticket } = this.data;
+    let submitAction$ = ticket
+      ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
+      : this.ticketsService.createTicket(ticketForm)
+
+    submitAction$.subscribe({
       next: (ticket) => {
         this.onClose();
-        this.data.tickets.push(ticket);
-        this.toastr.success('A new ticket has been created', 'Success');
+
+        if (ticket) {
+          // this.data.tickets.push(ticket);
+          this.toastr.success('The new ticket has been created', 'Success');
+        } else {
+          this.toastr.success('The ticket has been updated', 'Success');
+        }
       },
       error: (_err) => {
         this.toastr.error('Something went wrong', 'Error');
