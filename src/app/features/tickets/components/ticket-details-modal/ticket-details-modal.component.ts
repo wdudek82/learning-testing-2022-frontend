@@ -67,6 +67,10 @@ export class TicketDetailsModalComponent implements OnInit {
     this.usersOptions = this.createUsersOptions(this.data.users);
   }
 
+  get title(): AbstractControl {
+    return this.form.get('title')!;
+  }
+
   createForm(): void {
     const { ticket, authorId } = this.data;
     this.form = this.formBuilder.group({
@@ -95,10 +99,6 @@ export class TicketDetailsModalComponent implements OnInit {
       description: [ticket?.description ?? ''],
       relatedTicketId: [ticket?.relatedTicketId ?? -1],
     });
-  }
-
-  get title(): AbstractControl {
-    return this.form.get('title')!;
   }
 
   createSelectOptionsFromStringsArray(values: string[]): SelectOption[] {
