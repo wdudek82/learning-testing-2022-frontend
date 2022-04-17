@@ -52,7 +52,9 @@ or use script: `npm run deploy:gh`
   - [x] tickets resolver
   - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
   - [x] editing existing tickets
-  - [ ] sort tickets by position (if not null) or by createdAt date
+  - [ ] removing tickets
+  - [ ] implement sorting tickets table (by default sort by createdAt desc)
+  - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
   - [ ] comments visible under corresponding tickets
   - [ ] adding new comments

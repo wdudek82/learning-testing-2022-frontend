@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,13 +13,16 @@ import {
 } from '../ticket-details-modal/ticket-details-modal.component';
 import { TicketsService } from '@tickets/tickets.service';
 import { ToastrService } from "ngx-toastr";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
   styleUrls: ['./backlog.component.scss'],
 })
-export class BacklogComponent implements OnInit {
+export class BacklogComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   title = 'learning-testing-2022-frontend';
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
@@ -36,6 +39,9 @@ export class BacklogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
     this.getTickets();
     this.getUsers();
   }
@@ -44,7 +50,8 @@ export class BacklogComponent implements OnInit {
     this.ticketsService.getTickets().subscribe({
       next: (tickets) => {
         this.tickets = tickets;
-        this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+        // this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+        this.ticketsDataSource = this.createDataSource();
       },
       error: (err) => {
         this.toastr.error('Reloading tickets failed', 'Error')
@@ -55,9 +62,17 @@ export class BacklogComponent implements OnInit {
   getTickets(): void {
     this.route.data.subscribe(({ tickets, users }) => {
       this.tickets = tickets;
-      this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      this.createDataSource();
+      // this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      this.ticketsDataSource = this.createDataSource();
       // this.calculateTicketsPositions();
     });
+  }
+
+  createDataSource(): MatTableDataSource<Ticket> {
+    const dataSource =  new MatTableDataSource<Ticket>(this.tickets);
+    dataSource.paginator = this.paginator;
+    return dataSource;
   }
 
   getUsers(): void {
