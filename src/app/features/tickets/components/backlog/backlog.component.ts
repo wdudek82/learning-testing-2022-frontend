@@ -46,33 +46,25 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     this.getUsers();
   }
 
+  getTickets(): void {
+    this.route.data.subscribe(({ tickets, users }) => {
+      this.tickets = tickets;
+      this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      this.ticketsDataSource.paginator = this.paginator;
+      // this.calculateTicketsPositions();
+    });
+  }
+
   reloadTickets(): void {
     this.ticketsService.getTickets().subscribe({
       next: (tickets) => {
         this.tickets = tickets;
-        // this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
-        this.ticketsDataSource = this.createDataSource();
+        this.ticketsDataSource.data = this.tickets;
       },
       error: (err) => {
         this.toastr.error('Reloading tickets failed', 'Error')
       },
     });
-  }
-
-  getTickets(): void {
-    this.route.data.subscribe(({ tickets, users }) => {
-      this.tickets = tickets;
-      this.createDataSource();
-      // this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
-      this.ticketsDataSource = this.createDataSource();
-      // this.calculateTicketsPositions();
-    });
-  }
-
-  createDataSource(): MatTableDataSource<Ticket> {
-    const dataSource =  new MatTableDataSource<Ticket>(this.tickets);
-    dataSource.paginator = this.paginator;
-    return dataSource;
   }
 
   getUsers(): void {
@@ -105,7 +97,7 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     // TODO: after successful drag and drop store new positions values in the Database
     moveItemInArray(this.tickets, event.previousIndex, event.currentIndex);
     this.calculateTicketsPositions();
-    this.ticketsDataSource = new MatTableDataSource<any>(this.tickets);
+    this.ticketsDataSource.data = this.tickets;
   }
 
   createNewTicket(): void {
@@ -126,7 +118,9 @@ export class BacklogComponent implements OnInit, AfterViewInit {
           authorId: ticket.authorId,
         });
       },
-      error: (err) => {},
+      error: (_err) => {
+        this.toastr.error('Something went wrong', 'Error')
+      },
     });
   }
 
