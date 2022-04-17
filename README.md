@@ -44,6 +44,7 @@ or use script: `npm run deploy:gh`
 
 - [ ] better error handling (interceptor, error pages)
 - [ ] separate sign-out page (?)
+- [ ] signup form should not has validation triggered after submitting
 - [ ] signout view
   - [ ] email uniqueness checked only on submit
   - [ ] separate "show password" buttons for "password" and "password confirmation"
@@ -53,12 +54,12 @@ or use script: `npm run deploy:gh`
   - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
   - [x] editing existing tickets
   - [x] enable table pagination
+  - [x] drag & drop breaks pagination
+  - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] include ticket id in details modal when updating
-  - [ ] drag & drop breaks pagination
   - [ ] change formatting for priority and status in table (remove underscore and add title case)
   - [ ] removing tickets (only soft delete)
   - [ ] "Done" and "Cancelled" should be hidden by default (but searchable)
-  - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
   - [ ] comments visible under corresponding tickets
