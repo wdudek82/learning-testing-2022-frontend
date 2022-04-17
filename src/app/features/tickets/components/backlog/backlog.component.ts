@@ -11,10 +11,12 @@ import {
   trigger,
 } from '@angular/animations';
 import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
-import { TicketsService } from '../../tickets.service';
 import { Ticket } from '../../models';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { User } from '@core/models';
+import { PROJECT_ALIAS } from '@core/models/constants';
+import { AuthService } from '@auth/auth.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-backlog',
@@ -35,48 +37,41 @@ export class BacklogComponent implements OnInit {
   title = 'learning-testing-2022-frontend';
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
-  ticketsColumns: string[] = [
-    'id',
-    // 'position',
-    'title',
-    // 'description',
-    'priority',
-    'status',
-    // 'createdAt',
-    // 'updatedAt',
-    // 'deletedAt',
-  ];
+  ticketsColumns: string[] = ['id', 'title', 'priority', 'status'];
   expandedElement?: Ticket | null;
+  users: User[] = [];
+  signedInUser?: User;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private ticketsService: TicketsService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.loadTickets();
+    this.getTickets();
+    this.getUsers();
   }
 
-  loadTickets(): void {
-    this.route.data.pipe(
-      map(({tickets}) => {
-        this.interpolateTicketsIds();
-        this.calculateTicketsPositions();
-        return tickets;
-      }),
-    ).subscribe((tickets) => {
+  getTickets(): void {
+    this.route.data.subscribe(({ tickets, users }) => {
       this.tickets = tickets;
-      this.ticketsDataSource = new MatTableDataSource<Ticket>(tickets);
+      this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      this.calculateTicketsPositions();
     });
   }
 
-  interpolateTicketsIds(): void {
-    this.tickets.map((t, index) => {
-      t.id = `LT-${t.id}`;
-      return t;
+  getUsers(): void {
+    this.route.data.subscribe(({ users, signedInUser }) => {
+      this.users = users;
+      this.signedInUser = this.users.find((u) => u.id === signedInUser?.id);
     });
+  }
+
+  getTableCellValue(column: string, element: string): string {
+    // TODO: Or maybe directive? Or pipe? Filter? What would be cleaner?
+    return column === 'id' ? `${PROJECT_ALIAS}-${element}` : element;
   }
 
   calculateTicketsPositions(): void {
@@ -98,16 +93,35 @@ export class BacklogComponent implements OnInit {
     this.ticketsDataSource = new MatTableDataSource<any>(this.tickets);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TicketDetailsModalComponent, {
-      width: '700px',
-      data: {},
-      disableClose: true,
-    });
+  createNewTicket(): void {
+    this.authService.signedIn$.pipe(first()).subscribe((signedInUser) => {
+      const author = this.users.find((u) => u.id === signedInUser?.id);
+      // TODO: Have to find a better solution for that.
+      //  The signedInUser will never be null because ticket can't be created
+      //  if user is not signed-in.
+      if (!author) throw new Error("Author can't be null");
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`The dialog was closed. Result: ${result}`);
-      this.loadTickets();
+      const dialogConfig = {
+        width: '700px',
+        data: {
+          tickets: this.tickets,
+          users: this.users,
+          author,
+        },
+        disableClose: true,
+      };
+      const dialogRef = this.dialog.open(
+        TicketDetailsModalComponent,
+        dialogConfig,
+      );
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log(`The dialog was closed. Result: ${result}`);
+        this.getTickets();
+      });
     });
+  }
+
+  updateTicket(): void {
+    // TODO: Open modal with the existing ticket data
   }
 }

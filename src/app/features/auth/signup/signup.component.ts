@@ -20,37 +20,6 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
   form!: FormGroup;
-  // form = new FormGroup(
-  //   {
-  //     name: new FormControl('', [
-  //       Validators.required,
-  //       Validators.minLength(3),
-  //       Validators.maxLength(20),
-  //       Validators.pattern(/^[\w ]+$/),
-  //     ]),
-  //     email: new FormControl('', {
-  //       validators: [Validators.required, Validators.email],
-  //       asyncValidators: [
-  //         this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator),
-  //       ],
-  //     }),
-  //     password: new FormControl('', [
-  //       Validators.required,
-  //       Validators.minLength(5),
-  //       Validators.maxLength(20),
-  //       // Validators.pattern(/^$/),
-  //     ]),
-  //     passwordConfirmation: new FormControl('', [
-  //       Validators.required,
-  //       Validators.minLength(5),
-  //       Validators.maxLength(20),
-  //       // Validators.pattern(/^$/),
-  //     ]),
-  //     // role: new FormControl(),
-  //     // isActive: new FormControl(),
-  //   },
-  //   { validators: [new MatchPasswordValidator().validate] },
-  // );
   hidePassword = true;
 
   constructor(

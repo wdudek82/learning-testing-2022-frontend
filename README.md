@@ -50,10 +50,10 @@ or use script: `npm run deploy:gh`
   - [ ] password mismatch error visible only under password confirmation
 - [ ] tickets
   - [x] tickets resolver
-  - [ ] disabled author field in "create ticket" modal filled with currently signed-in user name
+  - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
   - [ ] editing existing tickets
   - [ ] sort tickets by position (if not null) or by createdAt date
-  - [ ] store new tickets positions in Database
+  - [ ] store new tickets positions in the Database
   - [ ] comments visible under corresponding tickets
   - [ ] adding new comments
   - [ ] editing own comments
@@ -63,11 +63,14 @@ or use script: `npm run deploy:gh`
   - [ ] WYSIWYG editor in comment field
   - [ ] board view
   - [ ] adding/removing tickets categories
+  - [ ] move inline styles to scss files
+  - [ ] rename "relatedTicket" to "linkedTicket" (on the BE side too)
 - [ ] users
   - [x] users resolver
   - [ ] editing users data, changing role and active state
   - [ ] adding users
   - [ ] deleting users (soft delete)
+  - [ ] move inline styles to scss files
 - [ ] implement authorisation/roles management
 - [ ] events logging (audit)
 - [ ] sending messages between users

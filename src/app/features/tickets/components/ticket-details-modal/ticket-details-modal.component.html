@@ -4,11 +4,29 @@
   <mat-form-field appearance="fill">
     <mat-label>Title</mat-label>
     <input matInput formControlName="title" />
-    <mat-error *ngIf="form.get('title')?.invalid">{{getErrorMessage('')}}</mat-error>
+    <mat-error *ngIf="form.get('title')?.invalid">{{getInputErrorMessage(form.get('title')!)}}</mat-error>
   </mat-form-field>
 
-  <section style="display: flex;">
-    <mat-form-field appearance="fill" style="flex-grow: 1; margin-right: 1rem;">
+  <section class="d-flex">
+    <mat-form-field appearance="fill" class="flex-grow-1 me-2">
+      <mat-label>Author</mat-label>
+      <mat-select formControlName="authorId">
+        <mat-option *ngFor="let author of usersOptions" [value]="author.value">
+          {{author.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="flex-grow-1 me-2">
+      <mat-label>Assignee</mat-label>
+      <mat-select formControlName="assigneeId">
+        <mat-option *ngFor="let assignee of usersOptions" [value]="assignee.value">
+          {{assignee.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="flex-grow-1">
       <mat-label>Priority</mat-label>
       <mat-select formControlName="priority">
         <mat-option *ngFor="let priority of prioritiesOptions" [value]="priority.value">
@@ -16,29 +34,21 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-
-    <mat-form-field appearance="fill" style="flex-grow: 1; margin-right: 1rem;">
-      <mat-label>Assignee</mat-label>
-      <mat-select formControlName="assignee">
-        <mat-option *ngFor="let user of usersOptions" [value]="user.value">
-          {{user.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
   </section>
-
-  <!--  <mat-form-field appearance="fill">-->
-  <!--    <mat-label>Related Ticket</mat-label>-->
-  <!--    <input matInput formControlName="relatedTicket"/>-->
-  <!--    <mat-error *ngIf="form.get('relatedTicket')?.invalid">{{getErrorMessage('')}}</mat-error>-->
-  <!--  </mat-form-field>-->
 
   <mat-form-field appearance="fill">
     <mat-label>Description</mat-label>
     <textarea matInput formControlName="description" rows="10"></textarea>
-    <mat-error *ngIf="form.get('description')?.invalid">{{getErrorMessage('')}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Related Ticket</mat-label>
+    <mat-select formControlName="relatedTicket">
+      <mat-option *ngFor="let ticket of ticketsOptions" [value]="ticket.value">
+        {{ticket.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid" type="submit">Submit</button>
   <button mat-raised-button (click)="onClose()" type="button">Close</button>

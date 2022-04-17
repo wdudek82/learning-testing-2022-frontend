@@ -1,85 +1,115 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '@core/models';
-import { UsersService } from '@core/services/users.service';
 import { Ticket } from '@tickets/models';
 import { TicketsService } from '@tickets/tickets.service';
+import { FormService } from '@core/services/form.service';
+
+export interface TicketModalData {
+  tickets: Ticket[];
+  ticket?: Ticket;
+  users: User[];
+  author: User;
+}
+
+interface SelectOption {
+  value: number | string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-ticket-details-modal',
   templateUrl: './ticket-details-modal.component.html',
   styleUrls: ['./ticket-details-modal.component.scss'],
 })
-export class TicketDetailsModalComponent implements OnInit, OnDestroy {
-  @Input() ticket?: Ticket;
-  prioritiesOptions: any[] = [
+export class TicketDetailsModalComponent implements OnInit {
+  prioritiesOptions: SelectOption[] = [
     { value: 'very_low', viewValue: 'very low' },
     { value: 'low', viewValue: 'low' },
     { value: 'normal', viewValue: 'normal' },
     { value: 'high', viewValue: 'high' },
     { value: 'very_high', viewValue: 'very high' },
   ];
-  usersOptions: any[] = [];
-  form = new FormGroup({
-    title: new FormControl('', [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(200),
-    ]),
-    description: new FormControl(''),
-    priority: new FormControl(this.prioritiesOptions[2].value),
-    assignee: new FormControl(''),
-    relatedTicket: new FormControl(''),
-  });
-  private subs = new Subscription();
-  private users$: Observable<User[]> = new Observable<User[]>();
+  ticketsOptions: SelectOption[] = [];
+  usersOptions: SelectOption[] = [];
+  form!: FormGroup;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: TicketModalData,
     public dialogRef: MatDialogRef<TicketDetailsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private usersService: UsersService,
+    private formBuilder: FormBuilder,
     private ticketsService: TicketsService,
+    private formService: FormService,
     private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.subs.add();
-    this.getUsers();
-    this.getUsersOptions();
+    this.initializeForm();
+    this.ticketsOptions = this.getTicketsOptions(this.data.tickets);
+    this.usersOptions = this.getUsersOptions(this.data.users);
   }
 
-  getUsers(): void {
-    this.users$ = this.usersService.getUsers();
-  }
-
-  getUsersOptions(): void {
-    // TODO: Move this to a resolver.
-    this.users$.subscribe((users) => {
-      this.usersOptions = users.map((u) => ({
-        value: u.id,
-        viewValue: u.name,
-      }));
+  initializeForm(): void {
+    this.form = this.formBuilder.group({
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(200),
+        ],
+      ],
+      authorId: [
+        {
+          value: this.data.author.id,
+          disabled: true,
+        },
+      ],
+      assigneeId: [null],
+      priority: [this.prioritiesOptions[2].value],
+      description: [''],
+      relatedTicket: [''],
     });
+  }
+
+  get title(): AbstractControl {
+    return this.form.get('title')!;
+  }
+
+  getUsersOptions(users: User[]): SelectOption[] {
+    return users.map((u) => ({
+      value: u.id,
+      viewValue: u.name,
+    }));
+  }
+
+  getTicketsOptions(tickets: Ticket[]): SelectOption[] {
+    return tickets.map((t) => ({
+      value: t.id,
+      viewValue: `${t.id} ${t.title}`,
+    }));
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    // TODO: When authentication is implemented this should be an id of currently signed in user.
-    const nawTicket = {
-      ...this.form.value,
-      authorId: 5,
-    };
-    this.ticketsService.createTicket(nawTicket).subscribe({
+    // const newTicket = this.form.value;
+    const newTicket = this.form.getRawValue();
+    console.log(newTicket); // TODO: Remove when done.
+    this.ticketsService.createTicket(newTicket).subscribe({
       next: () => {
         this.onClose();
         this.toastr.success('A new ticket has been created', 'Success');
       },
       error: (_err) => {
         this.toastr.error('Something went wrong', 'Error');
-      }
+      },
     });
   }
 
@@ -87,9 +117,7 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  getErrorMessage(name: string) {}
-
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
+  getInputErrorMessage(control: AbstractControl): string {
+    return this.formService.getInputErrorMessage(control);
   }
 }

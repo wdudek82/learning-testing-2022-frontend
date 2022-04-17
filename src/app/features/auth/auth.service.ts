@@ -45,8 +45,8 @@ export class AuthService {
     return this.http
       .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
-        tap(({ name, email, role }) => {
-          this.signedInSubject.next({ name, email, role });
+        tap(({ id, name, email, role }) => {
+          this.signedInSubject.next({ id, name, email, role });
         }),
       );
   }

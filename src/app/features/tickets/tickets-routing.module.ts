@@ -4,6 +4,7 @@ import { BacklogComponent } from './components/backlog/backlog.component';
 import { BoardComponent } from './components/board/board.component';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { TicketsResolver } from '@tickets/tickets.resolver';
+import { UsersResolver } from '@core/resolvers/users.resolver';
 
 const routes: Routes = [
   {
@@ -11,7 +12,10 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [AuthGuard],
     component: BacklogComponent,
-    resolve: { tickets: TicketsResolver },
+    resolve: {
+      tickets: TicketsResolver,
+      users: UsersResolver,
+    },
   },
   {
     path: 'board',

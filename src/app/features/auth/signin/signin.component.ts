@@ -26,7 +26,9 @@ export class SigninComponent implements OnInit {
     private formService: FormService,
     private authService: AuthService,
     private toastr: ToastrService,
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: [
@@ -39,8 +41,6 @@ export class SigninComponent implements OnInit {
       ],
     });
   }
-
-  ngOnInit(): void {}
 
   get email(): AbstractControl {
     return this.form.get('email')!;
