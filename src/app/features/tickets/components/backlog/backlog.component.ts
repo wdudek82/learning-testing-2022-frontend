@@ -1,42 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { TicketDetailsModalComponent } from '../ticket-details-modal/ticket-details-modal.component';
-import { Ticket } from '../../models';
-import { ActivatedRoute } from '@angular/router';
 import { User } from '@core/models';
 import { PROJECT_ALIAS } from '@core/models/constants';
+import { Ticket } from '@tickets/models';
+import {
+  TicketDetailsModalComponent,
+  TicketModalData,
+} from '../ticket-details-modal/ticket-details-modal.component';
+import { TicketsService } from '@tickets/tickets.service';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
   styleUrls: ['./backlog.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
-      ),
-    ]),
-  ],
 })
 export class BacklogComponent implements OnInit {
   title = 'learning-testing-2022-frontend';
   ticketsDataSource: MatTableDataSource<any> = new MatTableDataSource<Ticket>();
   tickets: Ticket[] = [];
-  ticketsColumns: string[] = ['id', 'title', 'priority', 'status'];
-  expandedElement?: Ticket | null;
+  ticketsColumns: string[] = ['id', 'title', 'status', 'priority'];
   users: User[] = [];
   signedInUserId!: number;
 
@@ -44,11 +31,25 @@ export class BacklogComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    private ticketsService: TicketsService,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
     this.getTickets();
     this.getUsers();
+  }
+
+  reloadTickets(): void {
+    this.ticketsService.getTickets().subscribe({
+      next: (tickets) => {
+        this.tickets = tickets;
+        this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
+      },
+      error: (err) => {
+        this.toastr.error('Reloading tickets failed', 'Error')
+      },
+    });
   }
 
   getTickets(): void {
@@ -67,7 +68,7 @@ export class BacklogComponent implements OnInit {
   }
 
   getTableCellValue(column: string, element: string): string {
-    // TODO: The main function of this method id adding PROJECT_ALIAS before
+    // TODO: The main idea for this method is adding PROJECT_ALIAS before
     //  ticket id. Probably overkill/messy solution.
     //  Maybe directive would be better? Or pipe? Filter? What would be cleaner?
     return column === 'id' ? `${PROJECT_ALIAS}-${element}` : element;
@@ -93,26 +94,36 @@ export class BacklogComponent implements OnInit {
   }
 
   createNewTicket(): void {
-    const dialogConfig = {
-      width: '700px',
-      data: {
-        tickets: this.tickets,
-        users: this.users,
-        authorId: this.signedInUserId,
-      },
-      disableClose: true,
-    };
-    const dialogRef = this.dialog.open(
-      TicketDetailsModalComponent,
-      dialogConfig,
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`The dialog was closed. Result: ${result}`);
-      this.getTickets();
+    this.openTicketModal({
+      tickets: this.tickets,
+      users: this.users,
+      authorId: this.signedInUserId,
     });
   }
 
-  updateTicket(): void {
-    // TODO: Open modal with the existing ticket data
+  updateTicket(ticketId: number): void {
+    this.ticketsService.getTicketById(ticketId).subscribe({
+      next: (ticket) => {
+        this.openTicketModal({
+          tickets: this.tickets,
+          users: this.users,
+          ticket,
+          authorId: ticket.authorId,
+        });
+      },
+      error: (err) => {},
+    });
+  }
+
+  openTicketModal(data: TicketModalData): void {
+    const dialogRef = this.dialog.open(TicketDetailsModalComponent, {
+      width: '700px',
+      data,
+      disableClose: false,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`The dialog was closed. Result: ${result}`);
+      this.reloadTickets();
+    });
   }
 }

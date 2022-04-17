@@ -62,7 +62,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Related Ticket</mat-label>
-    <mat-select formControlName="relatedTicket">
+    <mat-select formControlName="relatedTicketId">
       <mat-option *ngFor="let ticket of ticketsOptions" [value]="ticket.value">
         {{ ticket.viewValue }}
       </mat-option>
