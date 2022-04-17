@@ -52,7 +52,9 @@ or use script: `npm run deploy:gh`
   - [x] tickets resolver
   - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
   - [x] editing existing tickets
-  - [ ] removing tickets
+  - [x] enable table pagination
+  - [ ] include ticket id in details modal when updating
+  - [ ] removing tickets - design needed (should "Done" and "Cancelled" be hidden?)
   - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
@@ -66,7 +68,6 @@ or use script: `npm run deploy:gh`
   - [ ] board view
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
-  - [ ] pagination is not working
 - [ ] users
   - [x] users resolver
   - [ ] editing users data, changing role and active state
