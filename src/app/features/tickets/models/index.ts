@@ -12,6 +12,7 @@ export enum TicketStatus {
   IN_DESIGN = 'in_design',
   IN_PROGRESS = 'in_progress',
   IN_REVIEW = 'in_review',
+  TESTING = 'testing',
   DONE = 'done',
   CANCELLED = 'cancelled',
 }
