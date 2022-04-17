@@ -16,8 +16,8 @@ import {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private signedInSubject = new ReplaySubject<Partial<User> | null>(1);
-  signedIn$ = this.signedInSubject.asObservable();
+  private signedInUserSubject = new ReplaySubject<Partial<User> | null>(1);
+  signedInUser$ = this.signedInUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +31,7 @@ export class AuthService {
   checkAuth(): Observable<CheckAuthRes> {
     return this.http.get<CheckAuthRes>(`${this.apiUrl}/auth/whoami`).pipe(
       tap((res) => {
-        this.signedInSubject.next(res.signedInUser);
+        this.signedInUserSubject.next(res.signedInUser);
       }),
     );
   }
@@ -46,7 +46,7 @@ export class AuthService {
       .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
         tap(({ id, name, email, role }) => {
-          this.signedInSubject.next({ id, name, email, role });
+          this.signedInUserSubject.next({ id, name, email, role });
         }),
       );
   }
@@ -54,7 +54,7 @@ export class AuthService {
   signOut(): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/auth/signout`, {}).pipe(
       tap(() => {
-        this.signedInSubject.next(null);
+        this.signedInUserSubject.next(null);
       }),
     );
   }

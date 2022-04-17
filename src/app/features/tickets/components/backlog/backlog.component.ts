@@ -15,8 +15,6 @@ import { Ticket } from '../../models';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '@core/models';
 import { PROJECT_ALIAS } from '@core/models/constants';
-import { AuthService } from '@auth/auth.service';
-import { first } from 'rxjs';
 
 @Component({
   selector: 'app-backlog',
@@ -40,13 +38,12 @@ export class BacklogComponent implements OnInit {
   ticketsColumns: string[] = ['id', 'title', 'priority', 'status'];
   expandedElement?: Ticket | null;
   users: User[] = [];
-  signedInUser?: User;
+  signedInUserId!: number;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -63,14 +60,16 @@ export class BacklogComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.route.data.subscribe(({ users, signedInUser }) => {
+    this.route.data.subscribe(({ users, signedInUserId }) => {
       this.users = users;
-      this.signedInUser = this.users.find((u) => u.id === signedInUser?.id);
+      this.signedInUserId = signedInUserId;
     });
   }
 
   getTableCellValue(column: string, element: string): string {
-    // TODO: Or maybe directive? Or pipe? Filter? What would be cleaner?
+    // TODO: The main function of this method id adding PROJECT_ALIAS before
+    //  ticket id. Probably overkill/messy solution.
+    //  Maybe directive would be better? Or pipe? Filter? What would be cleaner?
     return column === 'id' ? `${PROJECT_ALIAS}-${element}` : element;
   }
 
@@ -94,30 +93,22 @@ export class BacklogComponent implements OnInit {
   }
 
   createNewTicket(): void {
-    this.authService.signedIn$.pipe(first()).subscribe((signedInUser) => {
-      const author = this.users.find((u) => u.id === signedInUser?.id);
-      // TODO: Have to find a better solution for that.
-      //  The signedInUser will never be null because ticket can't be created
-      //  if user is not signed-in.
-      if (!author) throw new Error("Author can't be null");
-
-      const dialogConfig = {
-        width: '700px',
-        data: {
-          tickets: this.tickets,
-          users: this.users,
-          author,
-        },
-        disableClose: true,
-      };
-      const dialogRef = this.dialog.open(
-        TicketDetailsModalComponent,
-        dialogConfig,
-      );
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log(`The dialog was closed. Result: ${result}`);
-        this.getTickets();
-      });
+    const dialogConfig = {
+      width: '700px',
+      data: {
+        tickets: this.tickets,
+        users: this.users,
+        authorId: this.signedInUserId,
+      },
+      disableClose: true,
+    };
+    const dialogRef = this.dialog.open(
+      TicketDetailsModalComponent,
+      dialogConfig,
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`The dialog was closed. Result: ${result}`);
+      this.getTickets();
     });
   }
 

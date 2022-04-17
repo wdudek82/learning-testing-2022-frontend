@@ -19,7 +19,7 @@ export class SignedInGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> {
-    return this.authService.signedIn$.pipe(
+    return this.authService.signedInUser$.pipe(
       map((value) => {
         return !value || this.router.parseUrl('/home');
       }),

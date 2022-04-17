@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   signedIn$!: Observable<Partial<User> | null>;
 
   constructor(private authService: AuthService) {
-    this.signedIn$ = this.authService.signedIn$;
+    this.signedIn$ = this.authService.signedInUser$;
   }
 
   ngOnInit(): void {

@@ -50,6 +50,8 @@
     </mat-select>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid" type="submit">Submit</button>
-  <button mat-raised-button (click)="onClose()" type="button">Close</button>
+  <div mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" class="mr-xs" [disabled]="form.invalid" type="submit">Submit</button>
+    <button mat-raised-button (click)="onClose()" type="button">Close</button>
+  </div>
 </form>

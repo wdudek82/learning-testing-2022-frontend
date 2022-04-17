@@ -5,6 +5,7 @@ import { BoardComponent } from './components/board/board.component';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { TicketsResolver } from '@tickets/tickets.resolver';
 import { UsersResolver } from '@core/resolvers/users.resolver';
+import { SignedInUserResolver } from '@auth/resolvers/signed-in-user.resolver';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: BacklogComponent,
     resolve: {
+      signedInUserId: SignedInUserResolver,
       tickets: TicketsResolver,
       users: UsersResolver,
     },

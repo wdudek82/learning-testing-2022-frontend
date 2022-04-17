@@ -20,11 +20,11 @@ export class MainLayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.signedIn$ = this.authService.signedIn$;
+    this.signedIn$ = this.authService.signedInUser$;
   }
 
   signOut() {
-    this.authService.signedIn$
+    this.authService.signedInUser$
       .pipe(
         first(),
         tap((user) =>

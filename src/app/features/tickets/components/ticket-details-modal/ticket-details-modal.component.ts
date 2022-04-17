@@ -16,7 +16,7 @@ export interface TicketModalData {
   tickets: Ticket[];
   ticket?: Ticket;
   users: User[];
-  author: User;
+  authorId: number;
 }
 
 interface SelectOption {
@@ -68,7 +68,7 @@ export class TicketDetailsModalComponent implements OnInit {
       ],
       authorId: [
         {
-          value: this.data.author.id,
+          value: this.data.authorId,
           disabled: true,
         },
       ],
@@ -99,9 +99,7 @@ export class TicketDetailsModalComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    // const newTicket = this.form.value;
     const newTicket = this.form.getRawValue();
-    console.log(newTicket); // TODO: Remove when done.
     this.ticketsService.createTicket(newTicket).subscribe({
       next: () => {
         this.onClose();
