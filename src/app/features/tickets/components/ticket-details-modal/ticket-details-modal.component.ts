@@ -11,6 +11,7 @@ import { User } from '@core/models';
 import { Ticket } from '@tickets/models';
 import { TicketsService } from '@tickets/tickets.service';
 import { FormService } from '@core/services/form.service';
+import { PROJECT_ALIAS } from '@core/models/constants';
 
 export interface TicketModalData {
   tickets: Ticket[];
@@ -93,7 +94,7 @@ export class TicketDetailsModalComponent implements OnInit {
   getTicketsOptions(tickets: Ticket[]): SelectOption[] {
     return tickets.map((t) => ({
       value: t.id,
-      viewValue: `${t.id} ${t.title}`,
+      viewValue: `${PROJECT_ALIAS}-${t.id} ${t.title}`,
     }));
   }
 
@@ -101,8 +102,9 @@ export class TicketDetailsModalComponent implements OnInit {
     if (this.form.invalid) return;
     const newTicket = this.form.getRawValue();
     this.ticketsService.createTicket(newTicket).subscribe({
-      next: () => {
+      next: (ticket) => {
         this.onClose();
+        this.data.tickets.push(ticket);
         this.toastr.success('A new ticket has been created', 'Success');
       },
       error: (_err) => {

@@ -65,6 +65,7 @@ or use script: `npm run deploy:gh`
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
   - [ ] rename "relatedTicket" to "linkedTicket" (on the BE side too)
+  - [ ] pagination is not working
 - [ ] users
   - [x] users resolver
   - [ ] editing users data, changing role and active state

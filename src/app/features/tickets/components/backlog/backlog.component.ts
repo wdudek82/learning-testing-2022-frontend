@@ -55,7 +55,7 @@ export class BacklogComponent implements OnInit {
     this.route.data.subscribe(({ tickets, users }) => {
       this.tickets = tickets;
       this.ticketsDataSource = new MatTableDataSource<Ticket>(this.tickets);
-      this.calculateTicketsPositions();
+      // this.calculateTicketsPositions();
     });
   }
 

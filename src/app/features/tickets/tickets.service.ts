@@ -17,10 +17,10 @@ export class TicketsService {
   }
 
   getTicketById(id: number): Observable<Ticket> {
-    return of();
+    return this.http.get<Ticket>(`${this.apiUrl}/${id}`);
   }
 
-  createTicket(ticket: Ticket): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/tickets`, ticket);
+  createTicket(ticket: Ticket): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.apiUrl}/tickets`, ticket);
   }
 }
