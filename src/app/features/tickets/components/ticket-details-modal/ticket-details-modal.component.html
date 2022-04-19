@@ -127,6 +127,7 @@
 
     <!-- A new comment field -->
     <mat-form-field
+      *ngIf="this.data.ticket"
       appearance="outline"
       [formGroupName]="comments.controls.length - 1"
       class="comment__content mt-3"
