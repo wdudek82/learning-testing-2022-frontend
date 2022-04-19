@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   Validators,
@@ -68,36 +69,59 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   get title(): AbstractControl {
-    return this.form.get('title')!;
+    return this.form.get('ticketBody.title')!;
+  }
+
+  get comments(): FormArray {
+    return this.form.get('comments') as FormArray;
+  }
+
+  get commentsFormGroups(): FormGroup[] {
+    return ([
+      ...this.data.ticket?.comments.map((c) => {
+        return this.formBuilder.group({
+          author: [{ value: c.authorId, disabled: true }],
+          content: [{ value: c.content, disabled: true }],
+        });
+      }) || [],
+        this.formBuilder.group({
+          author: { value: this.data.authorId, disabled: true },
+          content: '',
+        })
+    ]
+    );
   }
 
   createForm(): void {
     const { ticket, authorId } = this.data;
     this.form = this.formBuilder.group({
-      title: [
-        ticket?.title ?? '',
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(200),
+      ticketBody: this.formBuilder.group({
+        title: [
+          ticket?.title ?? '',
+          [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.maxLength(200),
+          ],
         ],
-      ],
-      authorId: [
-        {
-          value: authorId,
-          disabled: true,
-        },
-      ],
-      assigneeId: [ticket?.assigneeId ?? -1],
-      status: [
-        {
-          value: ticket?.status ?? this.statusOptions[0].value,
-          disabled: !ticket,
-        },
-      ],
-      priority: [ticket?.priority ?? this.priorityOptions[2].value],
-      description: [ticket?.description ?? ''],
-      relatedTicketId: [ticket?.relatedTicketId ?? -1],
+        authorId: [
+          {
+            value: authorId,
+            disabled: true,
+          },
+        ],
+        assigneeId: [ticket?.assigneeId ?? -1],
+        status: [
+          {
+            value: ticket?.status ?? this.statusOptions[0].value,
+            disabled: !ticket,
+          },
+        ],
+        priority: [ticket?.priority ?? this.priorityOptions[2].value],
+        description: [ticket?.description ?? ''],
+        relatedTicketId: [ticket?.relatedTicketId ?? -1],
+      }),
+      comments: this.formBuilder.array(this.commentsFormGroups),
     });
   }
 
@@ -122,26 +146,33 @@ export class TicketDetailsModalComponent implements OnInit {
     const empty: SelectOption = { value: -1, viewValue: '-' };
     const result = tickets.map((t) => ({
       value: t.id,
-      viewValue: `${PROJECT_ALIAS}-${t.id} ${t.title}`,
+      viewValue: `${this.getTicketId(+t.id)} ${t.title}`,
     }));
     return [empty, ...result];
   }
 
+  getTicketId(ticketId: number): string {
+    return `${PROJECT_ALIAS}-${ticketId}`;
+  }
+
   onSubmit(): void {
     if (this.form.invalid) return;
-    const ticketForm = this.form.getRawValue();
+    const ticketForm = this.form.getRawValue()['ticketBody'];
+
+    console.log(ticketForm);
 
     // An id of -1 is only a placeholder for null value. This is needed because null cannot be used
     // as a default value in mat-select dropdown, and -1 has to be used instead.
     // But it would not be recognised by the backend.
     const { assigneeId, relatedTicketId } = ticketForm;
     ticketForm.assigneeId = assigneeId === -1 ? null : assigneeId;
-    ticketForm.relatedTicketId = relatedTicketId === -1 ? null : relatedTicketId;
+    ticketForm.relatedTicketId =
+      relatedTicketId === -1 ? null : relatedTicketId;
 
     const { ticket } = this.data;
     let submitAction$ = ticket
       ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
-      : this.ticketsService.createTicket(ticketForm)
+      : this.ticketsService.createTicket(ticketForm);
 
     submitAction$.subscribe({
       next: (ticket) => {
@@ -151,6 +182,8 @@ export class TicketDetailsModalComponent implements OnInit {
           // this.data.tickets.push(ticket);
           this.toastr.success('The new ticket has been created', 'Success');
         } else {
+          // TODO: Switch to updating individual fields after they have been touched and blurred.
+          //  Same for comments - save after touched & blurred.
           this.toastr.success('The ticket has been updated', 'Success');
         }
       },
