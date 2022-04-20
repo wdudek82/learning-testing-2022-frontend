@@ -57,6 +57,7 @@ or use script: `npm run deploy:gh`
   - [x] editing existing tickets
   - [x] enable table pagination
   - [x] drag & drop breaks pagination
+  - [ ] add "environment" field (FE and BE)
   - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] include ticket id in details modal when updating
   - [ ] change formatting for priority and status in table (remove underscore and add title case)
@@ -80,9 +81,15 @@ or use script: `npm run deploy:gh`
   - [ ] adding users
   - [ ] deleting users (soft delete)
   - [ ] move inline styles to scss files
+  - [ ] user profiles
+  - [ ] avatars
 - [ ] implement authorisation/roles management
 - [ ] events logging (audit)
 - [ ] sending messages between users
 - [ ] SSO with Gmail?
 - [ ] use websockets
   - [ ] show user online status
+  - [ ] add chat
+- [ ] color themes (light, dark, etc.)
+- [ ] add more languages (i18n)
+- [ ] dockerize the whole application
