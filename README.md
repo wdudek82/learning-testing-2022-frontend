@@ -44,11 +44,13 @@ or use script: `npm run deploy:gh`
 
 - [ ] better error handling (interceptor, error pages)
 - [ ] separate sign-out page (?)
-- [ ] signup view
+- [ ] sign-up view
   - [ ] validation should not be triggered on submitting
   - [ ] email uniqueness checked only on submit
   - [ ] separate "show password" buttons for "password" and "password confirmation"
   - [ ] password mismatch error visible only under password confirmation
+- [ ] sign-in
+  - [ ] show email/password errors below corresponding input field
 - [ ] tickets
   - [x] tickets resolver
   - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
