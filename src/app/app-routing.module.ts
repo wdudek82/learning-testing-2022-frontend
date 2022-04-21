@@ -32,19 +32,17 @@ const routes: Routes = [
   },
   {
     path: 'tickets',
+    canLoad: [AuthGuard],
     loadChildren: () =>
       import('./features/tickets/tickets.module').then((m) => m.TicketsModule),
-    // TODO: add tickets resolver
-    canActivate: [AuthGuard],
   },
   {
     path: 'users',
+    canLoad: [AuthGuard],
     loadChildren: () =>
       import('./features/users-management/users-management.module').then(
         (m) => m.UsersManagementModule,
       ),
-    // TODO: add users resolver
-    canActivate: [AuthGuard],
   },
   {
     path: '**',
