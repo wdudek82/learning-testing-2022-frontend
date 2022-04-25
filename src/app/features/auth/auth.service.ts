@@ -41,11 +41,11 @@ export class AuthService {
   }
 
   signIn(credentials: SignInCredentials): Observable<SignInRes> {
-    // TODO: return only a username or id
     return this.http
       .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
         tap(({ id, name, email, role }) => {
+
           this.signedInUserSubject.next({ id, name, email, role });
         }),
       );

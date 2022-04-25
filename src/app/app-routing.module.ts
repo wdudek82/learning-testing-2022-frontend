@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from '@core/components/home/home.component';
 import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 import { SignupComponent } from '@auth/signup/signup.component';
 import { SigninComponent } from '@auth/signin/signin.component';
@@ -11,11 +10,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
+    redirectTo: 'tickets',
   },
   {
     path: 'auth',

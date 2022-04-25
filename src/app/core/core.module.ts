@@ -8,11 +8,10 @@ import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthHttpInterceptor } from './interceptors/auth-http.interceptor';
-import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
-const components = [HomeComponent, MainLayoutComponent, PageNotFoundComponent];
+const components = [MainLayoutComponent, PageNotFoundComponent];
 
 @NgModule({
   declarations: [...components],

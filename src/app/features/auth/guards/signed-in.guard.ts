@@ -21,7 +21,7 @@ export class SignedInGuard implements CanActivate {
   ): Observable<boolean | UrlTree> {
     return this.authService.signedInUser$.pipe(
       map((value) => {
-        return !value || this.router.parseUrl('/home');
+        return !value || this.router.parseUrl('/auth/signin');
       }),
     );
   }

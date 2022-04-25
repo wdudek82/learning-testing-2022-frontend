@@ -1,16 +1,6 @@
 <mat-toolbar color="primary">
   <span class="brand">Jeera</span>
 
-  <button
-    mat-flat-button
-    color="primary"
-    routerLink="/home"
-    routerLinkActive="active"
-  >
-    <mat-icon>home</mat-icon>
-    Home
-  </button>
-
   <ng-container *ngIf="signedIn$ | async">
     <button
       mat-flat-button

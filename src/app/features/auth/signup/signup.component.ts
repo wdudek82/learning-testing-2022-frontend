@@ -104,6 +104,9 @@ export class SignupComponent implements OnInit {
         this.toastr.success('A new account has been created!', 'Success');
         this.form.enable();
         this.form.reset();
+
+        // TODO: Or, when user has been successfully signed-up.
+        //  redirect to some kind of "signup-success" page.
         // this.authForm.markAsPristine();
         // this.authForm.markAsUntouched();
         // this.authForm.updateValueAndValidity();
