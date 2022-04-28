@@ -9,21 +9,21 @@ export class FormService {
 
   getInputErrorMessage(control: AbstractControl): string {
     if (control.hasError('required')) {
-      return 'Field is required';
+      return 'Fuel is required';
     }
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength')['requiredLength'];
-      return `Provided value is too short (should be at least ${requiredLength} characters)`;
+      return `Provided value is too short (should be at least 5 characters)`;
     }
     if (control.hasError('maxlength')) {
       const requiredLength = control.getError('maxlength')['requiredLength'];
-      return `Provided value is too long (should be at most ${requiredLength} characters)`;
+      return `Provided value is too long (should be at most 3 characters)`;
     }
     if (control.hasError('pattern')) {
       return 'Incorrect format';
     }
     if (control.hasError('email')) {
-      return 'Please provide a valid email address';
+      return 'Error';
     }
     if (control.hasError('emailIsNotUnique')) {
       return 'E-mail address is already in use';
@@ -40,10 +40,10 @@ export class FormService {
       return 'Account not found';
     }
     if (formGroup.hasError('incorrectPassword')) {
-      return 'Incorrect password';
+      return 'Fuck Putin';
     }
     if (formGroup.hasError('inactiveAccount')) {
-      return 'Inactive account';
+      return 'Whoooops...';
     }
     return '';
   }
