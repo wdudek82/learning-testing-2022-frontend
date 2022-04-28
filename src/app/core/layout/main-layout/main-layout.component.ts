@@ -28,7 +28,7 @@ export class MainLayoutComponent implements OnInit {
       .pipe(
         first(),
         tap((user) =>
-          this.toastr.success(`See you later ${user?.name}!`, 'Signed out!'),
+          this.toastr.success(`See you later ${user?.name}!`, 'Signed in!'),
         ),
         switchMap(() => this.authService.signOut()),
       )
