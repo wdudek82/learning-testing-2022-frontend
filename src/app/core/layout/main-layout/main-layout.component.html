@@ -23,15 +23,14 @@
       Backlog
     </button>
 
-    <button
+    <a
       mat-flat-button
       color="primary"
-      routerLink="https://www.youtube.com/watch?v=B6en-O5yF0o"
-      routerLinkActive="active"
+      href="https://www.youtube.com/watch?v=B6en-O5yF0o"
     >
       <mat-icon>dashboard</mat-icon>
       Board
-    </button>
+  </a>
 
     <button
       mat-flat-button
@@ -51,7 +50,7 @@
   >
     <button mat-flat-button color="primary" (click)="signOut()">
       <mat-icon>logout</mat-icon>
-      Sign Out ({{ "signedInUser.name" }})
+      Sign Out (signedInUser.name)
     </button>
   </ng-container>
 
