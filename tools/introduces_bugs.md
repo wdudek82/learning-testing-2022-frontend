@@ -2,6 +2,7 @@
 - [ ] "manage Users" - incorrect capitalization
 - [ ] page refresh will logout user
 - [ ] "Board" link in navbar incorrectly redirects to an external resource
+- [ ] incorrect page <title>
 
 BŁĘDY DO IMPLEMENTACJI :rolling_on_the_floor_laughing:
 odkrycie hasła w formularzu logowania
