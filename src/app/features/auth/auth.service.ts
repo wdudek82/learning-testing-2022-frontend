@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { catchError, Observable, ReplaySubject, tap, throwError } from "rxjs";
 import { environment } from '@environments/environment';
 import { User } from '@core/models';
 import {
@@ -32,6 +32,10 @@ export class AuthService {
     return this.http.get<CheckAuthRes>(`${this.apiUrl}/auth/whoami`).pipe(
       tap((res) => {
         this.signedInUserSubject.next(res.signedInUser);
+      }),
+      catchError((err) => {
+        this.signedInUserSubject.next(null);
+        return throwError(err);
       }),
     );
   }

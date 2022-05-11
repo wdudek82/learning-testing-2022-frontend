@@ -9,13 +9,14 @@ import { User } from '@core/models';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  signedIn$!: Observable<Partial<User> | null>;
+  // signedIn$!: Observable<Partial<User> | null>;
 
   constructor(private authService: AuthService) {
-    this.signedIn$ = this.authService.signedInUser$;
+    // this.signedIn$ = this.authService.signedInUser$;
   }
 
   ngOnInit(): void {
-    this.authService.checkAuth().subscribe();
+    // this.authService.checkAuth().subscribe();
+    this.authService.signOut().subscribe();
   }
 }
